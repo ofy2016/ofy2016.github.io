@@ -84,23 +84,23 @@
 使用集群的目的就是提高可用性。高可用性H">
 <meta property="og:type" content="article">
 <meta property="og:title" content="转载 - 高可用的MongoDB集群">
-<meta property="og:url" content="http://pylixm.cc/posts/2016-04-06-Mongodb-relica.html">
-<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:url" content="http://ofy2016.github.io/posts/2016-04-06-Mongodb-relica.html">
+<meta property="og:site_name" content="OFY团队博客">
 <meta property="og:description" content="刚接触MongoDB，就要用到它的集群，只能硬着头皮短时间去看文档和尝试自行搭建。迁移历史数据更是让人恼火，近100G的数据文件，导入、清理垃圾数据执行的速度蜗牛一样的慢。趁着这个时间，把这几天关于Mongod集群相关的内容整理一下。大概介绍一下MongoDB集群的几种方式：Master-Slave、Relica Set、Sharding，并做简单的演示。
 使用集群的目的就是提高可用性。高可用性H">
-<meta property="og:image" content="http://pylixm.cc/images/mongo-1.png">
-<meta property="og:image" content="http://pylixm.cc/images/mongo-2.png">
-<meta property="og:image" content="http://pylixm.cc/images/mongo-3.png">
-<meta property="og:image" content="http://pylixm.cc/images/mongo-4.png">
-<meta property="og:image" content="http://pylixm.cc/images/mongo-5.png">
-<meta property="og:image" content="http://pylixm.cc/images/mongo-6.png">
-<meta property="og:image" content="http://pylixm.cc/images/mongo-7.png">
+<meta property="og:image" content="http://ofy2016.github.io/images/mongo-1.png">
+<meta property="og:image" content="http://ofy2016.github.io/images/mongo-2.png">
+<meta property="og:image" content="http://ofy2016.github.io/images/mongo-3.png">
+<meta property="og:image" content="http://ofy2016.github.io/images/mongo-4.png">
+<meta property="og:image" content="http://ofy2016.github.io/images/mongo-5.png">
+<meta property="og:image" content="http://ofy2016.github.io/images/mongo-6.png">
+<meta property="og:image" content="http://ofy2016.github.io/images/mongo-7.png">
 <meta property="og:updated_time" content="2016-04-06T09:43:10.117Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="转载 - 高可用的MongoDB集群">
 <meta name="twitter:description" content="刚接触MongoDB，就要用到它的集群，只能硬着头皮短时间去看文档和尝试自行搭建。迁移历史数据更是让人恼火，近100G的数据文件，导入、清理垃圾数据执行的速度蜗牛一样的慢。趁着这个时间，把这几天关于Mongod集群相关的内容整理一下。大概介绍一下MongoDB集群的几种方式：Master-Slave、Relica Set、Sharding，并做简单的演示。
 使用集群的目的就是提高可用性。高可用性H">
-<meta name="twitter:image" content="http://pylixm.cc/images/mongo-1.png">
+<meta name="twitter:image" content="http://ofy2016.github.io/images/mongo-1.png">
 
 
 
@@ -118,7 +118,7 @@
   };
 </script>
 
-  <title> 转载 - 高可用的MongoDB集群 | PyLixm'Wiki </title>
+  <title> 转载 - 高可用的MongoDB集群 | OFY团队博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -165,7 +165,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">PyLixm'Wiki</span>
+      <span class="site-title">OFY团队博客</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -547,8 +547,8 @@ mongorestore -h IP --port PORT --drop -d DBNAME -c COLLECTION xxx.bson
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/2016-03-24-Django-class-Views.html" rel="next" title="Django学习笔记- Class View">
-                <i class="fa fa-chevron-left"></i> Django学习笔记- Class View
+              <a href="/posts/2016-03-08-Mysql-python.html" rel="next" title="python的MySQLdb模块 连接 mysql 错误 Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock'">
+                <i class="fa fa-chevron-left"></i> python的MySQLdb模块 连接 mysql 错误 Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock'
               </a>
             
           </div>
@@ -584,7 +584,7 @@ mongorestore -h IP --port PORT --drop -d DBNAME -c COLLECTION xxx.bson
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="posts/2016-04-06-Mongodb-relica.html"
-           data-title="转载 - 高可用的MongoDB集群" data-url="http://pylixm.cc/posts/2016-04-06-Mongodb-relica.html">
+           data-title="转载 - 高可用的MongoDB集群" data-url="http://ofy2016.github.io/posts/2016-04-06-Mongodb-relica.html">
       </div>
     
   </div>
@@ -622,14 +622,14 @@ mongorestore -h IP --port PORT --drop -d DBNAME -c COLLECTION xxx.bson
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
-               alt="PyLixm" />
-          <p class="site-author-name" itemprop="name">PyLixm</p>
-          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+               alt="" />
+          <p class="site-author-name" itemprop="name"></p>
+          <p class="site-description motion-element" itemprop="description">团队博客</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -684,7 +684,7 @@ mongorestore -h IP --port PORT --drop -d DBNAME -c COLLECTION xxx.bson
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                  <a href="http://pylixm.cc" title="pylixm'wiki" target="_blank">pylixm'wiki</a>
                 </li>
               
             </ul>
@@ -723,7 +723,7 @@ mongorestore -h IP --port PORT --drop -d DBNAME -c COLLECTION xxx.bson
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+  <span class="author" itemprop="copyrightHolder"></span>
 </div>
 
 <div class="powered-by">
