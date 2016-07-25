@@ -1,0 +1,860 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="django," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="语法变量双括号
+判断使用大括号+%if xx xxelse xxendif 
+ifequal athlete.name coach.name xxelse xxendifequal 
+for athlete in athlete_list xxendfor
+for key, value in data.itemsendfor
+循环中使用的变量forloop.counter 总是一个表示当前循环的执">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django学习笔记-模板">
+<meta property="og:url" content="http://pylixm.cc/posts/2015-11-15-Django-Template.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="语法变量双括号
+判断使用大括号+%if xx xxelse xxendif 
+ifequal athlete.name coach.name xxelse xxendifequal 
+for athlete in athlete_list xxendfor
+for key, value in data.itemsendfor
+循环中使用的变量forloop.counter 总是一个表示当前循环的执">
+<meta property="og:updated_time" content="2016-05-16T14:23:00.024Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django学习笔记-模板">
+<meta name="twitter:description" content="语法变量双括号
+判断使用大括号+%if xx xxelse xxendif 
+ifequal athlete.name coach.name xxelse xxendifequal 
+for athlete in athlete_list xxendfor
+for key, value in data.itemsendfor
+循环中使用的变量forloop.counter 总是一个表示当前循环的执">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Django学习笔记-模板 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Django学习笔记-模板
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-15T16:30:00+08:00" content="2015-11-15">
+              2015-11-15
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2015-11-15-Django-Template.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2015-11-15-Django-Template.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2015-11-15-Django-Template.html" class="leancloud_visitors" data-flag-title="Django学习笔记-模板">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p>双括号</p>
+<h4 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h4><p>使用大括号+%<br>if xx<br> xx<br>else<br> xx<br>endif </p>
+<p>ifequal athlete.name coach.name<br> xx<br>else<br> xx<br>endifequal </p>
+<p>for athlete in athlete_list<br> xx<br>endfor</p>
+<p>for key, value in data.items<br>endfor</p>
+<h4 id="循环中使用的变量"><a href="#循环中使用的变量" class="headerlink" title="循环中使用的变量"></a>循环中使用的变量</h4><p><code>forloop.counter</code> 总是一个表示当前循环的执行次数的整数计数器。<br>这个计数器是从1开始的，所以在第一次循环时 forloop.counter 将会被设置为1。</p>
+<p><code>forloop.counter0</code> 类似于 forloop.counter ，但是它是从0计数的。 第一次执行循环时这个变量会被设置为0。</p>
+<p><code>forloop.revcounter</code> 是表示循环中剩余项的整型变量。 在循环初次执行时 forloop.revcounter 将被设置为序列中项的总数。 最后一次循环执行中，这个变量将被置1。</p>
+<p><code>forloop.revcounter0</code> 类似于 forloop.revcounter ，但它以0做为结束索引。在第一次执行循环时，该变量会被置为序列的项的个数减1。</p>
+<p><code>forloop.first</code> 是一个布尔值。 在第一次执行循环时该变量为True。</p>
+<p><code>forloop.last</code> 是一个布尔值；在最后一次执行循环时被置为True。一个常见的用法是在一系列的链接之间放置管道符（|）<br>另一个常见的用途是为列表的每个单词的加上逗号。</p>
+<p><code>forloop.parentloop</code> 是一个指向当前循环的上一级循环的 forloop 对象的引用（在嵌套循环的情况下）。 </p>
+<h4 id="模板过滤器"><a href="#模板过滤器" class="headerlink" title="模板过滤器"></a>模板过滤器</h4><p><strong>数字过滤器</strong></p>
+<p><code>apnumber</code> 对于 1 到 9 的数字，该过滤器返回了数字的拼写形式。 否则，它将返回数字。 这遵循的是美联社风格。</p>
+<p><code>intcomma</code> 该过滤器将整数转换为每三个数字用一个逗号分隔的字符串。</p>
+<p><code>intword</code> 该过滤器将一个很大的整数转换成友好的文本表示方式。 它对于超过一百万的数字最好用。<br>最大支持不超过一千的五次方（1,000,000,000,000,000）。</p>
+<p><code>ordinal</code> 该过滤器将整数转换为序数词的字符串形式。</p>
+<p><strong>时间过滤器</strong></p>
+<p><code>date</code> date:”Y-m-d H:i:s”</p>
+<p><strong>其他</strong></p>
+<p><code>lower</code> 小写</p>
+<p><code>my_text|escape|linebreaks</code> 串联：先转义文本到HTML，再转换每行到 </p><p> 标签</p>
+<p><code>bio | truncatewords:&quot;30&quot;</code> 显示前30个字</p>
+<p><code>123|add:&quot;5&quot;</code> 给value加上一个数值</p>
+<p><code>&quot;AB&#39;CD&quot;|addslashes</code>单引号加上转义号，一般用于输出到javascript中</p>
+<p><code>&quot;abcd&quot;|capfirst</code> 第一个字母大写</p>
+<p><code>&quot;abcd&quot;|center:&quot;50&quot;</code> 输出指定长度的字符串，并把值对中</p>
+<p><code>&quot;123spam456spam789&quot;|cut:&quot;spam&quot;</code> 查找删除指定字符串</p>
+<p><code>value|date:&quot;F j, Y&quot;</code> 格式化日期</p>
+<p><code>value|default:&quot;(N/A)&quot;</code> 值不存在，使用指定值</p>
+<p><code>value|default_if_none:&quot;(N/A)&quot;</code> 值是None，使用指定值</p>
+<p><code>列表变量|dictsort:&quot;数字&quot;</code> 排序从小到大</p>
+<p><code>列表变量|dictsortreversed:&quot;数字&quot;</code> 排序从大到小</p>
+<p><code>if 92|divisibleby:&quot;2&quot;</code> 判断是否整除指定数字</p>
+<p><code>string|escape</code> 转换为html实体</p>
+<p><code>21984124|filesizeformat</code> 以1024为基数，计算最大值，保留1位小数，增加可读性</p>
+<p><code>list|first</code> 返回列表第一个元素</p>
+<p><code>&quot;ik23hr&amp;jqwh&quot;|fix_ampersands</code> &amp;转为&amp;</p>
+<p><code>13.414121241|floatformat</code> 保留1位小数，可为负数，几种形式</p>
+<p><code>13.414121241|floatformat:&quot;2&quot;</code> 保留2位小数</p>
+<p><code>23456 |get_digit:&quot;1&quot;</code> 从个位数开始截取指定位置的1个数字</p>
+<p><code>`list|join:&quot;, &quot;</code> 用指定分隔符连接列表</p>
+<p><code>list|length</code> 返回列表个数</p>
+<p><code>if 列表|length_is:&quot;3&quot;</code> 列表个数是否指定数值</p>
+<p><code>&quot;ABCD&quot;|linebreaks</code> 用新行用</p><p> 、 <br> 标记包裹</p>
+<p><code>&quot;ABCD&quot;|linebreaksbr</code> 用新行用<br> 标记包裹</p>
+<p><code>变量|linenumbers</code> 为变量中每一行加上行号</p>
+<p><code>&quot;abcd&quot;|ljust:&quot;50&quot;</code> 把字符串在指定宽度中对左，其它用空格填充</p>
+<p><code>for i in &quot;1abc1&quot;|make_list</code> 把字符串或数字的字符个数作为一个列表</p>
+<p><code>&quot;abcdefghijklmnopqrstuvwxyz&quot;|phone2numeric</code> 把字符转为可以对应的数字？？</p>
+<p><code>列表或数字|pluralize</code>单词的复数形式，如列表字符串个数大于1，返回s，否则返回空串</p>
+<p><code>列表或数字|pluralize:&quot;es&quot;</code> 指定es</p>
+<p><code>列表或数字|pluralize:&quot;y,ies&quot;</code> 指定ies替换为y</p>
+<p><code>object|pprint</code> 显示一个对象的值</p>
+<p><code>列表|random</code> 返回列表的随机一项</p>
+<p><code>string|removetags:&quot;br p div&quot;</code> 删除字符串中指定html标记</p>
+<p><code>string|rjust:&quot;50&quot;</code> 把字符串在指定宽度中对右，其它用空格填充</p>
+<p><code>` 列表|slice:&quot;:2&quot;</code> 切片</p>
+<p><code>string|slugify</code> 字符串中留下减号和下划线，其它符号删除，空格用减号替换</p>
+<p><code>3|stringformat:&quot;02i&quot;</code>字符串格式，使用Python的字符串格式语法</p>
+<p><code>&quot;E&lt;A&gt;A&lt;/A&gt;B&lt;C&gt;C&lt;/C&gt;D&quot;|striptags</code> 剥去[X]HTML语法标记</p>
+<p><code>时间变量|time:&quot;P&quot;</code> 日期的时间部分格式</p>
+<p><code>datetime|timesince</code> 给定日期到现在过去了多少时间</p>
+<p><code>datetime|timesince:&quot;other_datetime&quot;</code> 两日期间过去了多少时间</p>
+<p><code>datetime|timeuntil</code> 给定日期到现在过去了多少时间，与上面的区别在于2日期的前后位置。</p>
+<p><code>datetime|timeuntil:&quot;other_datetime&quot;</code> 两日期间过去了多少时间</p>
+<p><code>&quot;abdsadf&quot;|title</code> 首字母大写</p>
+<p><code>&quot;A B C D E F&quot;|truncatewords:&quot;3&quot;</code> 截取指定个数的单词</p>
+<p><code>&quot;&lt;a&gt;1&lt;a&gt;1&lt;a&gt;1&lt;/a&gt;&lt;/a&gt;&lt;/a&gt;22&lt;a&gt;1&lt;/a&gt;&quot;|truncatewords_html:&quot;2&quot;</code> 截取指定个数的html标记，并补完整</p>
+<p><code>list|unordered_list</code> 多重嵌套列表展现为html的无序列表</p>
+<p><code>string|upper</code> 全部大写</p>
+<p><code>link|urlencode</code> url编码</p>
+<p><code>string|urlize</code> 将URLs由纯文本变为可点击的链接。（没有实验成功）</p>
+<p><code>string|urlizetrunc:&quot;30&quot;</code> 同上，多个截取字符数。（同样没有实验成功）</p>
+<p><code>&quot;B C D E F&quot;|wordcount</code> 单词数</p>
+<p><code>&quot;a b c d e f g h i j k&quot;|wordwrap:&quot;5&quot;</code>每指定数量的字符就插入回车符</p>
+<p><code>boolean|yesno:&quot;Yes,No,Perhaps&quot;</code> 对三种值的返回字符串，对应是 非空,空,None</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2015-11-15-Django-Views.html" rel="next" title="Django学习笔记-url、视图">
+                <i class="fa fa-chevron-left"></i> Django学习笔记-url、视图
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2015-11-23-Django-uwsgi.html" rel="prev" title="Django uwsgi 启动问题 ImportError No module named os">
+                Django uwsgi 启动问题 ImportError No module named os <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2015-11-15-Django-Template.html"
+           data-title="Django学习笔记-模板" data-url="http://pylixm.cc/posts/2015-11-15-Django-Template.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#变量"><span class="nav-number">1.1.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断"><span class="nav-number">1.2.</span> <span class="nav-text">判断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环中使用的变量"><span class="nav-number">1.3.</span> <span class="nav-text">循环中使用的变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板过滤器"><span class="nav-number">1.4.</span> <span class="nav-text">模板过滤器</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

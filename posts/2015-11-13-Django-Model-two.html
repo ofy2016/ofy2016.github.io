@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="django," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="二、模型的操作（QuerySets）1、模型操作基础常用接口方法
+
+all(): 返回一个包含模式里所有数据记录的结果集queryset 
+filter():返回一个包含符合指定条件的模型记录的queryset
+exclude():和filter相反 查找不符合条件的那些记录
+get():获取单个复核条件的记录（没有找到或有超过一个结果都会抛出异常）
+order_by(): 排序
+
+queryse">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django学习笔记-模型(2)模型的操作">
+<meta property="og:url" content="http://pylixm.cc/posts/2015-11-13-Django-Model-two.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="二、模型的操作（QuerySets）1、模型操作基础常用接口方法
+
+all(): 返回一个包含模式里所有数据记录的结果集queryset 
+filter():返回一个包含符合指定条件的模型记录的queryset
+exclude():和filter相反 查找不符合条件的那些记录
+get():获取单个复核条件的记录（没有找到或有超过一个结果都会抛出异常）
+order_by(): 排序
+
+queryse">
+<meta property="og:updated_time" content="2016-05-16T14:22:59.932Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django学习笔记-模型(2)模型的操作">
+<meta name="twitter:description" content="二、模型的操作（QuerySets）1、模型操作基础常用接口方法
+
+all(): 返回一个包含模式里所有数据记录的结果集queryset 
+filter():返回一个包含符合指定条件的模型记录的queryset
+exclude():和filter相反 查找不符合条件的那些记录
+get():获取单个复核条件的记录（没有找到或有超过一个结果都会抛出异常）
+order_by(): 排序
+
+queryse">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Django学习笔记-模型(2)模型的操作 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Django学习笔记-模型(2)模型的操作
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-13T00:00:00+08:00" content="2015-11-13">
+              2015-11-13
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2015-11-13-Django-Model-two.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2015-11-13-Django-Model-two.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2015-11-13-Django-Model-two.html" class="leancloud_visitors" data-flag-title="Django学习笔记-模型(2)模型的操作">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="二、模型的操作（QuerySets）"><a href="#二、模型的操作（QuerySets）" class="headerlink" title="二、模型的操作（QuerySets）"></a>二、模型的操作（QuerySets）</h2><h3 id="1、模型操作基础"><a href="#1、模型操作基础" class="headerlink" title="1、模型操作基础"></a>1、模型操作基础</h3><p><strong>常用接口方法</strong></p>
+<ul>
+<li>all(): 返回一个包含模式里所有数据记录的结果集queryset </li>
+<li>filter():返回一个包含符合指定条件的模型记录的queryset</li>
+<li>exclude():和filter相反 查找不符合条件的那些记录</li>
+<li>get():获取单个复核条件的记录（没有找到或有超过一个结果都会抛出异常）</li>
+<li>order_by(): 排序</li>
+</ul>
+<p><strong>queryset的查询及符号</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">queryset.distinct </span><br><span class="line">queryset.values()</span><br><span class="line">quetyset.values_list()</span><br><span class="line">queryset.select_related()</span><br><span class="line">queryset.filter(title__gt=<span class="string">'123'</span>)</span><br><span class="line">querySet.distinct()  <span class="comment">#去重复</span></span><br><span class="line">__exact       <span class="comment"># 精确等于 like 'aaa'</span></span><br><span class="line">__iexact   <span class="comment"># 精确等于 忽略大小写 ilike 'aaa'</span></span><br><span class="line">__contains  <span class="comment">#  包含 like '%aaa%'</span></span><br><span class="line">__icontains <span class="comment">#  包含 忽略大小写 ilike '%aaa%'，</span></span><br><span class="line"><span class="comment"># 但是对于sqlite来说，contains的作用效果等同于icontains。</span></span><br><span class="line">__gt    <span class="comment">#大于</span></span><br><span class="line">__gte   <span class="comment"># 大于等于</span></span><br><span class="line">__lt    <span class="comment">#小于</span></span><br><span class="line">__lte   <span class="comment"># 小于等于</span></span><br><span class="line">__in    <span class="comment"># 存在于一个list范围内</span></span><br><span class="line">__startswith   <span class="comment">#以...开头</span></span><br><span class="line">__istartswith <span class="comment">#  以...开头 忽略大小写</span></span><br><span class="line">__endswith    <span class="comment"># 以...结尾</span></span><br><span class="line">__iendswith   <span class="comment"># 以...结尾，忽略大小写</span></span><br><span class="line">__range   <span class="comment"># 在...范围内</span></span><br><span class="line">__year    <span class="comment">#   日期字段的年份</span></span><br><span class="line">__month   <span class="comment"># 日期字段的月份</span></span><br><span class="line">__day      <span class="comment">#  日期字段的日</span></span><br><span class="line">__isnull=<span class="keyword">True</span>/<span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<p><strong>实例</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Publisher.objects.filter(country=<span class="string">"U.S.A."</span>, state_province=<span class="string">"CA"</span>)</span><br><span class="line">[&lt;Publisher: Apress&gt;]</span><br><span class="line"><span class="comment"># 逗号表示，and</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Publisher.objects.filter(name__contains=<span class="string">"press"</span>)</span><br><span class="line">[&lt;Publisher: Apress&gt;]</span><br></pre></td></tr></table></figure>
+<h3 id="2、模型的操作"><a href="#2、模型的操作" class="headerlink" title="2、模型的操作"></a>2、模型的操作</h3><h4 id="2-1-对象创建："><a href="#2-1-对象创建：" class="headerlink" title="2.1 对象创建："></a>2.1 对象创建：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>p = Publisher(name=<span class="string">'Apress'</span>,</span><br><span class="line"><span class="meta">... </span>        address=<span class="string">'2855 Telegraph Ave.'</span>,</span><br><span class="line"><span class="meta">... </span>        city=<span class="string">'Berkeley'</span>,</span><br><span class="line"><span class="meta">... </span>        state_province=<span class="string">'CA'</span>,</span><br><span class="line"><span class="meta">... </span>        country=<span class="string">'U.S.A.'</span>,</span><br><span class="line"><span class="meta">... </span>        website=<span class="string">'http://www.apress.com/'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p.save()</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-对象更新："><a href="#2-2-对象更新：" class="headerlink" title="2.2 对象更新："></a>2.2 对象更新：</h4><p><em>方法1</em>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Publisher.objects.filter(id=<span class="number">52</span>).update(name=<span class="string">'Apress Publishing'</span>)</span><br><span class="line"><span class="comment"># update()方法会返回一个整型数值，表示受影响的记录条数。</span></span><br></pre></td></tr></table></figure>
+<p><em>方法2</em>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pub= Publisher.objects.filter(id=<span class="number">52</span>).first()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pub.name = <span class="string">'Apress Publishing'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pub.save()</span><br></pre></td></tr></table></figure>
+<font color="red">注：1方法更优，2方法会更新publisher 的所有字段，所以效率低。</font>
+
+<h4 id="2-3-删除对象："><a href="#2-3-删除对象：" class="headerlink" title="2.3 删除对象："></a>2.3 删除对象：</h4><p><em>单条</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>p = Publisher.objects.get(name=<span class="string">"O'Reilly"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p.delete()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Publisher.objects.all()</span><br><span class="line">[&lt;Publisher: Apress Publishing&gt;]</span><br></pre></td></tr></table></figure>
+<p><em>多条</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>Publisher.objects.filter(country=<span class="string">'USA'</span>).delete()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Publisher.objects.all().delete()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Publisher.objects.all()</span><br><span class="line">[]</span><br></pre></td></tr></table></figure>
+<p>三、模型的迁移</p>
+<pre><code># todo
+</code></pre><p>四、模型的高级特性</p>
+<pre><code># todo 
+</code></pre><p>五、其他</p>
+<pre><code># todo 
+</code></pre><h4 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h4><p><a href="https://docs.djangoproject.com/en/1.8/topics/db/queries/" target="_blank" rel="external">https://docs.djangoproject.com/en/1.8/topics/db/queries/</a></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2015-11-01-Django-restfull-framework.html" rel="next" title="Django restfull framework 文档">
+                <i class="fa fa-chevron-left"></i> Django restfull framework 文档
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2015-11-15-Django-Views.html" rel="prev" title="Django学习笔记-url、视图">
+                Django学习笔记-url、视图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2015-11-13-Django-Model-two.html"
+           data-title="Django学习笔记-模型(2)模型的操作" data-url="http://pylixm.cc/posts/2015-11-13-Django-Model-two.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#二、模型的操作（QuerySets）"><span class="nav-number">1.</span> <span class="nav-text">二、模型的操作（QuerySets）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、模型操作基础"><span class="nav-number">1.1.</span> <span class="nav-text">1、模型操作基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、模型的操作"><span class="nav-number">1.2.</span> <span class="nav-text">2、模型的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-对象创建："><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 对象创建：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-对象更新："><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 对象更新：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-删除对象："><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 删除对象：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考："><span class="nav-number">1.2.4.</span> <span class="nav-text">参考：</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

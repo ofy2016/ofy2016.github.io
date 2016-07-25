@@ -1,0 +1,878 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="django," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="其他章节索引页
+笔记以要点形式展开，如有疑问欢迎留言！
+第十三章 模板最佳实践django 的模板的局限性，限制了我们将复杂的逻辑放在了 python 端，这何尝不是一件好事。
+从 django 1.8 开始，django 原生支持了 jinjia2 模板。
+尽量保持大多数的模板文件在目录 templates/ 下1234templates/    base.html    ... (other">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 最佳实践-读书笔记 - 第十三章 模板最佳实践">
+<meta property="og:url" content="http://pylixm.cc/posts/2016-07-02-Best.Practices.for.Django.1.8.3rd-Chapter-10.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="其他章节索引页
+笔记以要点形式展开，如有疑问欢迎留言！
+第十三章 模板最佳实践django 的模板的局限性，限制了我们将复杂的逻辑放在了 python 端，这何尝不是一件好事。
+从 django 1.8 开始，django 原生支持了 jinjia2 模板。
+尽量保持大多数的模板文件在目录 templates/ 下1234templates/    base.html    ... (other">
+<meta property="og:image" content="http://pylixm.cc/images/df.png">
+<meta property="og:updated_time" content="2016-07-03T09:28:43.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 最佳实践-读书笔记 - 第十三章 模板最佳实践">
+<meta name="twitter:description" content="其他章节索引页
+笔记以要点形式展开，如有疑问欢迎留言！
+第十三章 模板最佳实践django 的模板的局限性，限制了我们将复杂的逻辑放在了 python 端，这何尝不是一件好事。
+从 django 1.8 开始，django 原生支持了 jinjia2 模板。
+尽量保持大多数的模板文件在目录 templates/ 下1234templates/    base.html    ... (other">
+<meta name="twitter:image" content="http://pylixm.cc/images/df.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Django 最佳实践-读书笔记 - 第十三章 模板最佳实践 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Django 最佳实践-读书笔记 - 第十三章 模板最佳实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-02T00:00:00+08:00" content="2016-07-02">
+              2016-07-02
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2016-07-02-Best.Practices.for.Django.1.8.3rd-Chapter-10.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2016-07-02-Best.Practices.for.Django.1.8.3rd-Chapter-10.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2016-07-02-Best.Practices.for.Django.1.8.3rd-Chapter-10.html" class="leancloud_visitors" data-flag-title="Django 最佳实践-读书笔记 - 第十三章 模板最佳实践">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="2016-05-22-Best.Practices.for.Django.1.8.3rd-Index.html">其他章节索引页</a></p>
+<p>笔记以要点形式展开，如有疑问欢迎留言！</p>
+<h1 id="第十三章-模板最佳实践"><a href="#第十三章-模板最佳实践" class="headerlink" title="第十三章 模板最佳实践"></a>第十三章 模板最佳实践</h1><p>django 的模板的局限性，限制了我们将复杂的逻辑放在了 <code>python</code> 端，这何尝不是一件好事。</p>
+<p>从 django 1.8 开始，django 原生支持了 jinjia2 模板。</p>
+<h2 id="尽量保持大多数的模板文件在目录-templates-下"><a href="#尽量保持大多数的模板文件在目录-templates-下" class="headerlink" title="尽量保持大多数的模板文件在目录 templates/ 下"></a>尽量保持大多数的模板文件在目录 <code>templates/</code> 下</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">templates/</span><br><span class="line">    base.html</span><br><span class="line">    ... (other sitewide templates in here)</span><br><span class="line">    freezers/ (&quot;freezers&quot; app templates in here)</span><br></pre></td></tr></table></figure>
+<p>将模板放在 app 下 templates 是没有必要的，因为当app 作为可拔插的包拿来使用的时候，它的模板会被重新设计。<br>索性将所有app 模板放到templates 下，好维护些。</p>
+<h2 id="模板的架构模式"><a href="#模板的架构模式" class="headerlink" title="模板的架构模式"></a>模板的架构模式</h2><h3 id="2-层嵌套模式"><a href="#2-层嵌套模式" class="headerlink" title="2 层嵌套模式"></a>2 层嵌套模式</h3><p>2 层嵌套模式适合于全站统一布局的情况。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">templates/</span><br><span class="line">base.html</span><br><span class="line">dashboard.html <span class="comment"># extends base.html</span></span><br><span class="line">    profiles/</span><br><span class="line">        profile_detail.html <span class="comment"># extends base.html</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-层嵌套模式"><a href="#3-层嵌套模式" class="headerlink" title="3 层嵌套模式"></a>3 层嵌套模式</h3><p>3 层嵌套适合于每个app 需要自己的布局的情况。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">templates/</span><br><span class="line">base.html</span><br><span class="line">dashboard.html <span class="comment"># extends base.html</span></span><br><span class="line">    profiles/</span><br><span class="line">        base_profiles.html <span class="comment"># extends base.html</span></span><br><span class="line">        profile_detail.html <span class="comment"># extends base_profiles.html</span></span><br><span class="line">        profile_form.html <span class="comment"># extends base_profiles.html</span></span><br></pre></td></tr></table></figure>
+<h3 id="扁平比嵌套好"><a href="#扁平比嵌套好" class="headerlink" title="扁平比嵌套好"></a>扁平比嵌套好</h3><h2 id="在模板中限制逻辑处理"><a href="#在模板中限制逻辑处理" class="headerlink" title="在模板中限制逻辑处理"></a>在模板中限制逻辑处理</h2><h3 id="当在模板中遍历结果集时注意的问题："><a href="#当在模板中遍历结果集时注意的问题：" class="headerlink" title="当在模板中遍历结果集时注意的问题："></a>当在模板中遍历结果集时注意的问题：</h3><ul>
+<li>不要在模板中遍历巨大的结果集</li>
+<li>检索的对象多大，是不是所有的对象在模板中都需要</li>
+<li>将逻辑处理移出循环，不要重复处理，拖慢循环处理。</li>
+</ul>
+<h3 id="在使用-cache-之前，尝试优化，重构你的代码"><a href="#在使用-cache-之前，尝试优化，重构你的代码" class="headerlink" title="在使用 cache 之前，尝试优化，重构你的代码"></a>在使用 cache 之前，尝试优化，重构你的代码</h3><h3 id="保持模板简单，尽量少使用-js-或-filter-来处理数据，这样会拖慢你的页面"><a href="#保持模板简单，尽量少使用-js-或-filter-来处理数据，这样会拖慢你的页面" class="headerlink" title="保持模板简单，尽量少使用 js 或 filter 来处理数据，这样会拖慢你的页面"></a>保持模板简单，尽量少使用 js 或 filter 来处理数据，这样会拖慢你的页面</h3><h3 id="不要在模板中的结果集中遍历查询对象"><a href="#不要在模板中的结果集中遍历查询对象" class="headerlink" title="不要在模板中的结果集中遍历查询对象"></a>不要在模板中的结果集中遍历查询对象</h3><p>Bad Example :<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Greenfelds Who Want Ice Cream<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for voucher in voucher_list %&#125;</span><br><span class="line">    &#123;# Don't do this: conditional filtering in templates #&#125;</span><br><span class="line">    &#123;% if "greenfeld" in voucher.name.lower %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; voucher.name &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Roys Who Want Ice Cream<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for voucher in voucher_list %&#125;</span><br><span class="line">    &#123;# Don't do this: conditional filtering in templates #&#125;</span><br><span class="line">    &#123;% if "roy" in voucher.name.lower %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; voucher.name &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Right Exemple:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vouchers/views.py</span></span><br><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span> TemplateView</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Voucher</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GreenfeldRoyView</span><span class="params">(TemplateView)</span>:</span></span><br><span class="line">    template_name = <span class="string">"vouchers/views_conditional.html"</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_context_data</span><span class="params">(self, **kwargs)</span>:</span></span><br><span class="line">        context = super(GreenfeldRoyView, self).get_context_data(**kwargs)</span><br><span class="line">        context[<span class="string">"greenfelds"</span>] = \</span><br><span class="line">        Voucher.objects.filter(name__icontains=<span class="string">"greenfeld"</span>)</span><br><span class="line">        context[<span class="string">"roys"</span>] = Voucher.objects.filter(name__icontains=<span class="string">"roy"</span>)</span><br><span class="line">        <span class="keyword">return</span> context</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Greenfelds Who Want Ice Cream<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for voucher in greenfelds %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; voucher.name &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Roys Who Want Ice Cream<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for voucher in roys %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; voucher.name &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="不要在模板中隐含复杂的查询"><a href="#不要在模板中隐含复杂的查询" class="headerlink" title="不要在模板中隐含复杂的查询"></a>不要在模板中隐含复杂的查询</h3><p>Bad exemple:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;# list generated via User.object.all() #&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Ice Cream Fans and their favorite flavors.<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for user in user_list %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;:</span><br><span class="line">    &#123;# DON'T DO THIS: Generated implicit query per user #&#125;</span><br><span class="line">    &#123;&#123; user.flavor.title &#125;&#125;</span><br><span class="line">    &#123;# DON'T DO THIS: Second implicit query per user!!! #&#125;</span><br><span class="line">    &#123;&#123; user.flavor.scoops_remaining &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Right Exemple:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;# 生成列表的时使用： User.object.all().select_related("flavors") #&#125;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Ice Cream Fans and their favorite flavors.<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for user in user_list %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line">    &#123;&#123; user.name &#125;&#125;:</span><br><span class="line">    &#123;&#123; user.flavor.title &#125;&#125;</span><br><span class="line">    &#123;&#123; user.flavor.scoops_remaining &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="模板尽量避免加载导致cpu使用过高的对象"><a href="#模板尽量避免加载导致cpu使用过高的对象" class="headerlink" title="模板尽量避免加载导致cpu使用过高的对象"></a>模板尽量避免加载导致cpu使用过高的对象</h3><p>例如图片的加载，尽量使用模板外部的工具。</p>
+<p>详见：13.3.4 Gotcha 4: Hidden CPU Load in Templates</p>
+<h3 id="不要在模板中调用-rest-api"><a href="#不要在模板中调用-rest-api" class="headerlink" title="不要在模板中调用 rest api"></a>不要在模板中调用 rest api</h3><p>当我们在模板中调用 rest api 时，注意：</p>
+<ul>
+<li>在js请求数据，加载时，你需要分散你客户的注意力。</li>
+<li>python 处理缓慢的进程方式更多：消息队列，多线程，多进程等。</li>
+</ul>
+<h2 id="使用缩进来使你的模板更加易读"><a href="#使用缩进来使你的模板更加易读" class="headerlink" title="使用缩进来使你的模板更加易读"></a>使用缩进来使你的模板更加易读</h2><h2 id="block-super-的使用-来更好的使用继承特性"><a href="#block-super-的使用-来更好的使用继承特性" class="headerlink" title="block.super 的使用,来更好的使用继承特性"></a>block.super 的使用,来更好的使用继承特性</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;# simple base.html #&#125;</span><br><span class="line">&#123;% load staticfiles %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span></span><br><span class="line">    &#123;% block title %&#125;Two Scoops of Django&#123;% endblock title %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    &#123;% block stylesheets %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span></span><br><span class="line">        <span class="attr">href</span>=<span class="string">"&#123;% static "</span><span class="attr">css</span>/<span class="attr">project.css</span>" %&#125;"&gt;</span></span><br><span class="line">    &#123;% endblock stylesheets %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line">        &#123;% block content %&#125;</span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Two Scoops<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        &#123;% endblock content %&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends "base.html" %&#125;</span><br><span class="line">&#123;% load staticfiles %&#125;</span><br><span class="line">&#123;% block title %&#125;About Audrey and Daniel&#123;% endblock title %&#125;</span><br><span class="line">&#123;% block stylesheets %&#125;</span><br><span class="line">    &#123;&#123; block.super &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span></span><br><span class="line">    <span class="attr">href</span>=<span class="string">"&#123;% static "</span><span class="attr">css</span>/<span class="attr">about.css</span>" %&#125;"&gt;</span></span><br><span class="line">&#123;% endblock stylesheets %&#125;</span><br><span class="line">&#123;% block content %&#125;</span><br><span class="line">    &#123;&#123; block.super &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>About Audrey and Daniel<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>They enjoy eating ice cream<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">&#123;% endblock content %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="一些有用的技巧"><a href="#一些有用的技巧" class="headerlink" title="一些有用的技巧"></a>一些有用的技巧</h2><h3 id="样式的控制和-python的要松耦合"><a href="#样式的控制和-python的要松耦合" class="headerlink" title="样式的控制和 python的要松耦合"></a>样式的控制和 python的要松耦合</h3><h3 id="一些通用的约定"><a href="#一些通用的约定" class="headerlink" title="一些通用的约定"></a>一些通用的约定</h3><ul>
+<li><p>使用下划线来命名模板名称，block 名称。</p>
+</li>
+<li><p>block 的名字要清晰，如`
+
+- 在 block 结束时，也要写上名称，如 ``.</p>
+</li>
+</ul>
+<h3 id="使用具体的-model-对象名来命名模板对象列表"><a href="#使用具体的-model-对象名来命名模板对象列表" class="headerlink" title="使用具体的 model 对象名来命名模板对象列表"></a>使用具体的 model 对象名来命名模板对象列表</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;# toppings/topping_list.html #&#125;</span><br><span class="line">&#123;# Using implicit names #&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">    &#123;% for object in object_list %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; object &#125;&#125; <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"></span><br><span class="line">&#123;# Using explicit names #&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">    &#123;% for topping in topping_list %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; topping &#125;&#125; <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用-url-名字来代替硬编码的url"><a href="#使用-url-名字来代替硬编码的url" class="headerlink" title="使用 url 名字来代替硬编码的url"></a>使用 url 名字来代替硬编码的url</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Bad exemple:</span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/flavors/"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">Right exemple:</span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"&#123;% url 'flavors_list' %&#125;"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="debug-的时候可以开启，页面详细错误"><a href="#debug-的时候可以开启，页面详细错误" class="headerlink" title="debug 的时候可以开启，页面详细错误"></a>debug 的时候可以开启，页面详细错误</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># settings/local.py</span></span><br><span class="line">TEMPLATES = [&#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>,</span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="keyword">True</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>:</span><br><span class="line">        <span class="string">'string_if_invalid'</span>: <span class="string">'INVALID EXPRESSION: %s'</span></span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h2 id="错误模板的设置"><a href="#错误模板的设置" class="headerlink" title="错误模板的设置"></a>错误模板的设置</h2><p>在生产环境中，一定要设置错误页面，但不要过使页面复杂。</p>
+<h1 id="第十四章-模板的-tags-和-filters"><a href="#第十四章-模板的-tags-和-filters" class="headerlink" title="第十四章 模板的 tags 和 filters"></a>第十四章 模板的 tags 和 filters</h1><h2 id="filter-什么时候使用"><a href="#filter-什么时候使用" class="headerlink" title="filter 什么时候使用"></a>filter 什么时候使用</h2><ul>
+<li>格式化模板中数据</li>
+<li>rest api 中数据的格式化</li>
+</ul>
+<h2 id="自定义-tags"><a href="#自定义-tags" class="headerlink" title="自定义 tags"></a>自定义 tags</h2><p>尽量书写少的tags ：</p>
+<ul>
+<li>tags 比较难调试</li>
+<li>使代码不容易重用</li>
+<li>性能消耗比较大 </li>
+</ul>
+<h2 id="命名-tags-类库"><a href="#命名-tags-类库" class="headerlink" title="命名 tags 类库"></a>命名 tags 类库</h2><p><app name=""> tags.py</app></p>
+<h2 id="在-template-页面中加载-tags"><a href="#在-template-页面中加载-tags" class="headerlink" title="在 template 页面中加载 tags"></a>在 template 页面中加载 tags</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends "base.html" %&#125;</span><br><span class="line">&#123;% load flavors_tags %&#125;</span><br><span class="line"></span><br><span class="line"># Don't use this code!</span><br><span class="line"># It's an evil anti-pattern!</span><br><span class="line">from django import template</span><br><span class="line">template.add_to_builtins(</span><br><span class="line">    "flavors.templatetags.flavors_tags"</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="第十五章-Django-模板（DTL）-和-jinja2"><a href="#第十五章-Django-模板（DTL）-和-jinja2" class="headerlink" title="第十五章 Django 模板（DTL） 和 jinja2"></a>第十五章 Django 模板（DTL） 和 jinja2</h1><h2 id="不同之处"><a href="#不同之处" class="headerlink" title="不同之处"></a>不同之处</h2><p><img src="/images/df.png" alt=""></p>
+<h2 id="我们应该如何选择"><a href="#我们应该如何选择" class="headerlink" title="我们应该如何选择"></a>我们应该如何选择</h2><h3 id="DTL-的优点"><a href="#DTL-的优点" class="headerlink" title="DTL 的优点"></a>DTL 的优点</h3><ul>
+<li>django 的所有官方文档使用 DTL，便于理解。</li>
+<li>django + DTL 的组合更成熟。</li>
+<li>大多数的django 三方包使用的是 DTL。</li>
+<li>转化 DTL到jinja2需要大量的工作。</li>
+</ul>
+<h3 id="jinjia2-的优点"><a href="#jinjia2-的优点" class="headerlink" title="jinjia2 的优点"></a>jinjia2 的优点</h3><ul>
+<li>在django中可以被单独使用。</li>
+<li>jinja2 的语法更接近 python的语法。</li>
+<li>jinja2 更明确，例如函数的调用带有括号。</li>
+<li>jinja2 有更少的限制，例如可以给一个filter传递无限个参数。而DTL 只能传一个。</li>
+<li>jinja2 渲染更快。</li>
+</ul>
+<h3 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h3><ul>
+<li>新手建议使用 DTL</li>
+<li>页面简单的使用 DTL ，复杂的使用 jinja2 </li>
+<li>一个项目中，我们可以2个都使用。一个作为主要的模板，另一个为辅。</li>
+</ul>
+<h2 id="jinja2-部分使用举例"><a href="#jinja2-部分使用举例" class="headerlink" title="jinja2 部分使用举例"></a>jinja2 部分使用举例</h2><h3 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"display:none"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"csrfmiddlewaretoken"</span> <span class="attr">value</span>=<span class="string">"&#123;&#123; csrf_token &#125;&#125;"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="jinja2-无法使用-自定义-tags的"><a href="#jinja2-无法使用-自定义-tags的" class="headerlink" title="jinja2 无法使用 自定义 tags的"></a>jinja2 无法使用 自定义 tags的</h3><h3 id="jinja2-中使用-django-style-的-filter"><a href="#jinja2-中使用-django-style-的-filter" class="headerlink" title="jinja2 中使用 django-style 的  filter"></a>jinja2 中使用 django-style 的  filter</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># core/jinja2.py</span><br><span class="line">from __future__ import absolute_import # Python 2 only</span><br><span class="line">from django.contrib.staticfiles.storage import staticfiles_storage</span><br><span class="line">from django.core.urlresolvers import reverse</span><br><span class="line">from django.template import defaultfilters</span><br><span class="line"></span><br><span class="line">from jinja2 import Environment</span><br><span class="line">def environment(**options):</span><br><span class="line">    env = Environment(**options)</span><br><span class="line">    env.globals.update(&#123;</span><br><span class="line">    'static': staticfiles_storage.url,</span><br><span class="line">    'url': reverse,</span><br><span class="line">    'dj': defaultfilters</span><br><span class="line">    &#125;)</span><br><span class="line">    return env</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">```html</span><br><span class="line">&lt;table&gt;&lt;tbody&gt;</span><br><span class="line">&#123;% for purchase in purchase_list %&#125;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">    &lt;a href="&#123;&#123; url("purchase:detail", pk=purchase.pk) &#125;&#125;"&gt;</span><br><span class="line">        &#123;&#123; purchase.title &#125;&#125;</span><br><span class="line">    &lt;/a&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">    &lt;tr&gt;&#123;&#123; dj.date(purchase.created, "SHORT_DATE_FORMAT") &#125;&#125;&lt;/tr&gt;</span><br><span class="line">    &lt;tr&gt;&#123;&#123; dj.floatformat(purchase.amount, 2) &#125;&#125;&lt;/tr&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">&lt;/tbody&gt;&lt;/table&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="上下文-context-不能在-jinja2-中使用"><a href="#上下文-context-不能在-jinja2-中使用" class="headerlink" title="上下文 context 不能在 jinja2 中使用"></a>上下文 context 不能在 jinja2 中使用</h3><p>我们可以自定义中间件</p>
+<pre><code class="python"># advertisements/middleware.py
+import random
+from advertisements.models import Advertisement as Ad
+
+def AdvertisementMiddleware(object):
+    def process_request(request):
+        count = Advertisement.objects.filter(subject='ice-cream').count()
+        ads = Advertisement.objects.filter(subject='ice-cream')
+        # If necessary, add a context variable to the request object.
+        if not hasattr(request, 'context'):
+        request.context = {}
+        # Don't overwrite the context, instead we build on it.
+        request.context.update({'ad': ads[random.randrange(0, count)]})
+
+&lt;!-- base.html --&gt;
+{% set ctx = request.context %}
+...
+&lt;div class="ice-cream-advertisement"&gt;
+    &lt;a href="{{ ctx.ad.url }}"&gt;
+        &lt;img src="ctx.ad.image.url" /&gt;
+    &lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2016-06-26-Best.Practices.for.Django.1.8.3rd-Chapter-9.html" rel="next" title="Django 最佳实践-读书笔记 - 第十一章、第十二章 Form">
+                <i class="fa fa-chevron-left"></i> Django 最佳实践-读书笔记 - 第十一章、第十二章 Form
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2016-07-02-Best.Practices.for.Django.1.8.3rd-Chapter-10.html"
+           data-title="Django 最佳实践-读书笔记 - 第十三章 模板最佳实践" data-url="http://pylixm.cc/posts/2016-07-02-Best.Practices.for.Django.1.8.3rd-Chapter-10.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第十三章-模板最佳实践"><span class="nav-number">1.</span> <span class="nav-text">第十三章 模板最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#尽量保持大多数的模板文件在目录-templates-下"><span class="nav-number">1.1.</span> <span class="nav-text">尽量保持大多数的模板文件在目录 templates/ 下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板的架构模式"><span class="nav-number">1.2.</span> <span class="nav-text">模板的架构模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-层嵌套模式"><span class="nav-number">1.2.1.</span> <span class="nav-text">2 层嵌套模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-层嵌套模式"><span class="nav-number">1.2.2.</span> <span class="nav-text">3 层嵌套模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扁平比嵌套好"><span class="nav-number">1.2.3.</span> <span class="nav-text">扁平比嵌套好</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在模板中限制逻辑处理"><span class="nav-number">1.3.</span> <span class="nav-text">在模板中限制逻辑处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#当在模板中遍历结果集时注意的问题："><span class="nav-number">1.3.1.</span> <span class="nav-text">当在模板中遍历结果集时注意的问题：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在使用-cache-之前，尝试优化，重构你的代码"><span class="nav-number">1.3.2.</span> <span class="nav-text">在使用 cache 之前，尝试优化，重构你的代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保持模板简单，尽量少使用-js-或-filter-来处理数据，这样会拖慢你的页面"><span class="nav-number">1.3.3.</span> <span class="nav-text">保持模板简单，尽量少使用 js 或 filter 来处理数据，这样会拖慢你的页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要在模板中的结果集中遍历查询对象"><span class="nav-number">1.3.4.</span> <span class="nav-text">不要在模板中的结果集中遍历查询对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要在模板中隐含复杂的查询"><span class="nav-number">1.3.5.</span> <span class="nav-text">不要在模板中隐含复杂的查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板尽量避免加载导致cpu使用过高的对象"><span class="nav-number">1.3.6.</span> <span class="nav-text">模板尽量避免加载导致cpu使用过高的对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要在模板中调用-rest-api"><span class="nav-number">1.3.7.</span> <span class="nav-text">不要在模板中调用 rest api</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用缩进来使你的模板更加易读"><span class="nav-number">1.4.</span> <span class="nav-text">使用缩进来使你的模板更加易读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block-super-的使用-来更好的使用继承特性"><span class="nav-number">1.5.</span> <span class="nav-text">block.super 的使用,来更好的使用继承特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些有用的技巧"><span class="nav-number">1.6.</span> <span class="nav-text">一些有用的技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#样式的控制和-python的要松耦合"><span class="nav-number">1.6.1.</span> <span class="nav-text">样式的控制和 python的要松耦合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些通用的约定"><span class="nav-number">1.6.2.</span> <span class="nav-text">一些通用的约定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用具体的-model-对象名来命名模板对象列表"><span class="nav-number">1.6.3.</span> <span class="nav-text">使用具体的 model 对象名来命名模板对象列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-url-名字来代替硬编码的url"><span class="nav-number">1.6.4.</span> <span class="nav-text">使用 url 名字来代替硬编码的url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#debug-的时候可以开启，页面详细错误"><span class="nav-number">1.6.5.</span> <span class="nav-text">debug 的时候可以开启，页面详细错误</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误模板的设置"><span class="nav-number">1.7.</span> <span class="nav-text">错误模板的设置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第十四章-模板的-tags-和-filters"><span class="nav-number">2.</span> <span class="nav-text">第十四章 模板的 tags 和 filters</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#filter-什么时候使用"><span class="nav-number">2.1.</span> <span class="nav-text">filter 什么时候使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义-tags"><span class="nav-number">2.2.</span> <span class="nav-text">自定义 tags</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命名-tags-类库"><span class="nav-number">2.3.</span> <span class="nav-text">命名 tags 类库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-template-页面中加载-tags"><span class="nav-number">2.4.</span> <span class="nav-text">在 template 页面中加载 tags</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第十五章-Django-模板（DTL）-和-jinja2"><span class="nav-number">3.</span> <span class="nav-text">第十五章 Django 模板（DTL） 和 jinja2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不同之处"><span class="nav-number">3.1.</span> <span class="nav-text">不同之处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们应该如何选择"><span class="nav-number">3.2.</span> <span class="nav-text">我们应该如何选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DTL-的优点"><span class="nav-number">3.2.1.</span> <span class="nav-text">DTL 的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinjia2-的优点"><span class="nav-number">3.2.2.</span> <span class="nav-text">jinjia2 的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何选择"><span class="nav-number">3.2.3.</span> <span class="nav-text">如何选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jinja2-部分使用举例"><span class="nav-number">3.3.</span> <span class="nav-text">jinja2 部分使用举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF"><span class="nav-number">3.3.1.</span> <span class="nav-text">CSRF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinja2-无法使用-自定义-tags的"><span class="nav-number">3.3.2.</span> <span class="nav-text">jinja2 无法使用 自定义 tags的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinja2-中使用-django-style-的-filter"><span class="nav-number">3.3.3.</span> <span class="nav-text">jinja2 中使用 django-style 的  filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文-context-不能在-jinja2-中使用"><span class="nav-number">3.3.4.</span> <span class="nav-text">上下文 context 不能在 jinja2 中使用</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

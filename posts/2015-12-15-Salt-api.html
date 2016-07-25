@@ -1,0 +1,994 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="salt," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="原文地址：http://www.xiaomastack.com/2014/11/18/salt-api/
+salt-api也用了一段时间了，现在从安装、配置、使用三个方面梳理下知识。
+安装采用pip安装方便快捷，当然编译安装也很nice。
+安装pip采用的编译安装的方式，版本当前最新1.5.6，下载、解压、编译、安装是不变的法则。
+[root@saltstack ~]#wget https://p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SaltStack学习笔记2-- salt-api安装配置(转载)">
+<meta property="og:url" content="http://pylixm.cc/posts/2015-12-15-Salt-api.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="原文地址：http://www.xiaomastack.com/2014/11/18/salt-api/
+salt-api也用了一段时间了，现在从安装、配置、使用三个方面梳理下知识。
+安装采用pip安装方便快捷，当然编译安装也很nice。
+安装pip采用的编译安装的方式，版本当前最新1.5.6，下载、解压、编译、安装是不变的法则。
+[root@saltstack ~]#wget https://p">
+<meta property="og:updated_time" content="2016-05-30T07:26:38.667Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SaltStack学习笔记2-- salt-api安装配置(转载)">
+<meta name="twitter:description" content="原文地址：http://www.xiaomastack.com/2014/11/18/salt-api/
+salt-api也用了一段时间了，现在从安装、配置、使用三个方面梳理下知识。
+安装采用pip安装方便快捷，当然编译安装也很nice。
+安装pip采用的编译安装的方式，版本当前最新1.5.6，下载、解压、编译、安装是不变的法则。
+[root@saltstack ~]#wget https://p">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> SaltStack学习笔记2-- salt-api安装配置(转载) | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SaltStack学习笔记2-- salt-api安装配置(转载)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-15T00:00:00+08:00" content="2015-12-15">
+              2015-12-15
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/salt/" itemprop="url" rel="index">
+                    <span itemprop="name">salt</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2015-12-15-Salt-api.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2015-12-15-Salt-api.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2015-12-15-Salt-api.html" class="leancloud_visitors" data-flag-title="SaltStack学习笔记2-- salt-api安装配置(转载)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文地址：<a href="http://www.xiaomastack.com/2014/11/18/salt-api/" target="_blank" rel="external">http://www.xiaomastack.com/2014/11/18/salt-api/</a></p>
+<p>salt-api也用了一段时间了，现在从安装、配置、使用三个方面梳理下知识。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>采用pip安装方便快捷，当然编译安装也很nice。</p>
+<p>安装pip采用的编译安装的方式，版本当前最新1.5.6，下载、解压、编译、安装是不变的法则。</p>
+<pre><code>[root@saltstack ~]#wget https://pypi.python.org/packages/source/p/pip/pip-1.5.6.tar.gz#md5=01026f87978932060cc86c1dc527903e --no-check-certificate
+[root@saltstack ~]#tar xvfz pip-1.5.6.tar.gz
+[root@saltstack ~]#cd pip-1.5.6
+[root@saltstack pip-1.5.6]#python setup.py build
+[root@saltstack pip-1.5.6]#python setup.py install
+#安装完成后可以用pip freeze查看已安装的packages
+[root@saltstack pip-1.5.6]#pip freeze
+安装CherryPy，版本3.2.3
+
+[root@saltstack ~]#pip install cherrypy==3.2.3
+安装salt-api，版本0.8.3
+
+[root@saltstack ~]#pip install salt-api==0.8.3
+</code></pre><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><pre><code>[root@saltstack ~]# cd /etc/pki/tls/certs
+[root@saltstack certs]# make testcert
+umask 77 ; \
+    /usr/bin/openssl genrsa -aes128 2048 &gt; /etc/pki/tls/private/localhost.key
+Generating RSA private key, 2048 bit long modulus
+...+++
+..................................................................+++
+e is 65537 (0x10001)
+Enter pass phrase:    #键入加密短语，4到8191个字符
+Verifying - Enter pass phrase:    #确认加密短语
+umask 77 ; \
+    /usr/bin/openssl req -utf8 -new -key /etc/pki/tls/private/localhost.key -x509 -days 365 -out /etc/pki/tls/certs/localhost.crt -set_serial 0
+Enter pass phrase for /etc/pki/tls/private/localhost.key:    #再次输入相同的加密短语
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter &apos;.&apos;, the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:CN    #都可以选填
+State or Province Name (full name) []:Shanghai
+Locality Name (eg, city) [Default City]:Shanghai
+Organization Name (eg, company) [Default Company Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (eg, your name or your server&apos;s hostname) []:
+Email Address []:1989051805@qq.com
+[root@saltstack certs]# cd ../private/
+[root@saltstack private]# openssl rsa -in localhost.key -out localhost_nopass.key
+Enter pass phrase for localhost.key:    #输入之前的加密短语
+writing RSA key
+</code></pre><p>如果遇到这样的错误</p>
+<pre><code>[root@saltstack certs]# make testcert
+umask 77 ; \
+    /usr/bin/openssl req -utf8 -new -key /etc/pki/tls/private/localhost.key -x509 -days 365 -out /etc/pki/tls/certs/localhost.crt -set_serial 0
+unable to load Private Key
+139696733648712:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:703:Expecting: ANY PRIVATE KEY
+make: *** [/etc/pki/tls/certs/localhost.crt]
+</code></pre><p>删掉文件/etc/pki/tls/private/localhost.key文件，然后再make testcert。</p>
+<p>为salt-api创建用户并设定密码，用户名没有特别要求，我就用saltapi好了。</p>
+<pre><code>[root@saltstack ~]#useradd -M -s /sbin/nologin saltapi
+#由于是测试，故采用了弱密码&quot;password&quot;，正式环境必须采用强密码，多用特殊字符
+[root@saltstack ~]# passwd saltapi
+</code></pre><p>新增加配置文件/etc/salt/master.d/api.conf和/etc/salt/master.d/eauth.conf</p>
+<pre><code>#该配置文件给予saltapi用户所有模块使用权限，出于安全考虑一般只给予特定模块使用权限
+[root@saltstack master.d]# cat eauth.conf
+external_auth:
+  pam:
+    saltapi:
+      - .*
+[root@saltstack master.d]#
+[root@saltstack master.d]# cat api.conf
+rest_cherrypy:
+  port: 8888
+  ssl_crt: /etc/pki/tls/certs/localhost.crt
+  ssl_key: /etc/pki/tls/private/localhost_nopass.key
+[root@saltstack master.d]#
+</code></pre><p>寻找salt-api的启动脚本，我比较懒就不自己写了,在页面<a href="https://github.com/saltstack/salt-api/releases下载salt-api的tar.gz包,启动脚本在解压包的这个位置./pkg/rpm/salt-api。" target="_blank" rel="external">https://github.com/saltstack/salt-api/releases下载salt-api的tar.gz包,启动脚本在解压包的这个位置./pkg/rpm/salt-api。</a></p>
+<p>不过提供的脚本貌似有个小的bug，就是使用restart参数时，salt-api能够stop但是不能start，如下：</p>
+<pre><code>[root@saltstack ~]# /etc/init.d/salt-api restart
+Stopping salt-api daemon:                                  [确定]
+Starting salt-api daemon:                                  [失败]
+</code></pre><p>我估计可能是有些相关资源在下次启动前没有来得及释放造成的，解决方法很简单在脚本的restart函数的stop和start之间加上sleep语句。</p>
+<pre><code>restart() {
+   stop
+   sleep 1
+   start
+}
+</code></pre><p>然后重启就没有问题了</p>
+<pre><code>[root@saltstack ~]# /etc/init.d/salt-api restart
+Stopping salt-api daemon:                                  [确定]
+Starting salt-api daemon:                                  [确定]
+[root@saltstack ~]#
+</code></pre><p>最后重启salt-master在启动salt-api并将salt-api加入开机启动，安装就完成了。</p>
+<pre><code>[root@saltstack ~]# chkconfig salt-api on
+[root@saltstack ~]# /etc/init.d/salt-master restart
+Stopping salt-master daemon:                               [确定]
+Starting salt-master daemon:                               [确定]
+[root@saltstack ~]# /etc/init.d/salt-api restart
+Stopping salt-api daemon:                                  [确定]
+Starting salt-api daemon:                                  [确定]
+[root@saltstack ~]#
+</code></pre><h2 id="使用（基本的使用方法）"><a href="#使用（基本的使用方法）" class="headerlink" title="使用（基本的使用方法）"></a>使用（基本的使用方法）</h2><p>登录获取token</p>
+<pre><code>[root@syndic02 ~]# curl -k https://192.168.186.134:8888/login -H &quot;Accept: application/x-yaml&quot; -d username=&apos;saltapi&apos; -d password=&apos;password&apos; -d eauth=&apos;pam&apos;
+return:
+- eauth: pam
+  expire: 1416324685.2597771
+  perms:
+  - .*
+  start: 1416281485.2597761
+  token: 6171a922a9718ccb40e94ee7c8eb8768f4eea4e5
+  user: saltapi
+</code></pre><p>获取token后就可以使用token通信</p>
+<pre><code>#相当于在salt-master本地执行salt \* test.ping
+[root@syndic02 ~]# curl -k https://192.168.186.134:8888/ -H &quot;Accept: application/x-yaml&quot; -H &quot;X-Auth-Token: 6171a922a9718ccb40e94ee7c8eb8768f4eea4e5&quot; -d client=&apos;local&apos; -d tgt=&apos;*&apos; -d fun=&apos;test.ping&apos;
+return:
+- syndic01: true
+  syndic01-minion02: true
+  syndic02: true
+  syndic02-minion02: true
+
+#相当于在salt-master本地执行salt \* test.echo &apos;hello world&apos;
+[root@syndic02 ~]# curl -k https://192.168.186.134:8888/ -H &quot;Accept: application/x-yaml&quot; -H &quot;X-Auth-Token: 6171a922a9718ccb40e94ee7c8eb8768f4eea4e5&quot; -d client=&apos;local&apos; -d tgt=&apos;*&apos; -d fun=&apos;test.echo&apos; -d arg=&apos;hello world&apos;
+return:
+- syndic01: hello world
+  syndic01-minion02: hello world
+  syndic02: hello world
+  syndic02-minion02: hello world
+[root@syndic02 ~]#
+</code></pre><p>运维开发这样使用还是不方便的，下面写的是一个salt-api的类(其它的文章也提到过)可以参考。</p>
+<pre><code>#!/usr/bin/env python
+#coding=utf-8
+
+import urllib2, urllib, json, re
+
+class saltAPI:
+    def __init__(self):
+        self.__url = &apos;https://192.168.186.134:8888&apos;       #salt-api监控的地址和端口如:&apos;https://192.168.186.134:8888&apos;
+        self.__user =  &apos;saltapi&apos;             #salt-api用户名
+        self.__password = &apos;password&apos;          #salt-api用户密码
+        self.__token_id = self.salt_login()
+
+    def salt_login(self):
+        params = {&apos;eauth&apos;: &apos;pam&apos;, &apos;username&apos;: self.__user, &apos;password&apos;: self.__password}
+        encode = urllib.urlencode(params)
+        obj = urllib.unquote(encode)
+        headers = {&apos;X-Auth-Token&apos;:&apos;&apos;}
+        url = self.__url + &apos;/login&apos;
+        req = urllib2.Request(url, obj, headers)
+        opener = urllib2.urlopen(req)
+        content = json.loads(opener.read())
+        try:
+            token = content[&apos;return&apos;][0][&apos;token&apos;]
+            return token
+        except KeyError:
+            raise KeyError
+
+    def postRequest(self, obj, prefix=&apos;/&apos;):
+        url = self.__url + prefix
+        headers = {&apos;X-Auth-Token&apos;   : self.__token_id}
+        req = urllib2.Request(url, obj, headers)
+        opener = urllib2.urlopen(req)
+        content = json.loads(opener.read())
+        return content[&apos;return&apos;]
+
+    def saltCmd(self, params):
+        obj = urllib.urlencode(params)
+        obj, number = re.subn(&quot;arg\d&quot;, &apos;arg&apos;, obj)
+        res = self.postRequest(obj)
+        return res
+
+def main():
+    #以下是用来测试saltAPI类的部分
+    sapi = saltAPI()
+    params = {&apos;client&apos;:&apos;local&apos;, &apos;fun&apos;:&apos;test.ping&apos;, &apos;tgt&apos;:&apos;*&apos;}
+    #params = {&apos;client&apos;:&apos;local&apos;, &apos;fun&apos;:&apos;test.ping&apos;, &apos;tgt&apos;:&apos;某台服务器的key&apos;}
+    #params = {&apos;client&apos;:&apos;local&apos;, &apos;fun&apos;:&apos;test.echo&apos;, &apos;tgt&apos;:&apos;某台服务器的key&apos;, &apos;arg1&apos;:&apos;hello&apos;}
+    #params = {&apos;client&apos;:&apos;local&apos;, &apos;fun&apos;:&apos;test.ping&apos;, &apos;tgt&apos;:&apos;某组服务器的组名&apos;, &apos;expr_form&apos;:&apos;nodegroup&apos;}
+    test = sapi.saltCmd(params)
+    print test
+
+if __name__ == &apos;__main__&apos;:
+    main()
+</code></pre><p>测试效果</p>
+<pre><code>[root@syndic02 ~]# python salt-api.py
+[{u&apos;syndic02&apos;: True, u&apos;syndic02-minion02&apos;: True, u&apos;syndic01&apos;: True, u&apos;syndic01-minion02&apos;: True}]
+[root@syndic02 ~]#
+</code></pre><p>以上只是一些基本的实例，salt-api还可以实现更多功能。</p>
+<h2 id="2016-5-30-update："><a href="#2016-5-30-update：" class="headerlink" title="2016-5-30 update："></a>2016-5-30 update：</h2><p>当前salt版本：<code>2016.3</code>，官网对salt各模块安装配置文档做了整理重拍，更加清晰明了。</p>
+<p>前段时间试着按官方的文档搭建了下salt环境，感觉安装更简单了，下面更新下 salt-api的安装：</p>
+<pre><code># https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html
+# 1、安装 salt-api 
+yum install salt-api 
+
+# 2、生成 https ssl 证书
+salt-call --local tls.create_self_signed_cert
+
+# 3、向master 配置文件中增加：
+rest_cherrypy:
+port: 8000
+ssl_crt: /etc/pki/tls/certs/localhost.crt
+ssl_key: /etc/pki/tls/certs/localhost.key
+
+# 4、创建salt 用户
+[root@saltstack ~]# useradd -M -s /sbin/nologin salt
+[root@saltstack ~]# passwd salt
+# 修改 master 配置信息
+external_auth:
+  pam:
+    saltapi:
+      - .*  
+# 5、增加 api 访问信息
+ rest_cherrypy:
+   port: 8888
+   ssl_crt: /etc/pki/tls/certs/localhost.crt
+   ssl_key: /etc/pki/tls/private/localhost_nopass.key
+</code></pre><p>到此，salt-api 安装配置完成。需要注意的是，有时候 yum 和 pip 使用的python 并不是一个，所以有些依赖包安装的时候，尽量统一使用一种包管理管理工具。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/salt/" rel="tag">#salt</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2015-12-14-Yum-install.html" rel="next" title="yum install Header V3 RSA/SHA256 Signature, key ID 0608b895: NOKEY">
+                <i class="fa fa-chevron-left"></i> yum install Header V3 RSA/SHA256 Signature, key ID 0608b895: NOKEY
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2015-12-17-Salt-install.html" rel="prev" title="SaltStack学习笔记1-salt安装配置">
+                SaltStack学习笔记1-salt安装配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2015-12-15-Salt-api.html"
+           data-title="SaltStack学习笔记2-- salt-api安装配置(转载)" data-url="http://pylixm.cc/posts/2015-12-15-Salt-api.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用（基本的使用方法）"><span class="nav-number">3.</span> <span class="nav-text">使用（基本的使用方法）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2016-5-30-update："><span class="nav-number">4.</span> <span class="nav-text">2016-5-30 update：</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

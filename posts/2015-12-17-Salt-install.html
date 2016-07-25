@@ -1,0 +1,846 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="salt," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Salt，一种全新的基础设施管理方式，部署轻松，在几分钟内可运行起来，扩展性好，很容易管理上万台服务器，速度够快，服务器之间秒级通讯。
+salt底层采用动态的连接总线, 使其可以用于编配, 远程执行, 配置管理等等。
+官方文档：https://docs.saltstack.com/en/latest/
+中文文档：http://docs.saltstack.cn/zh_CN/latest/
+中文社区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SaltStack学习笔记1-salt安装配置">
+<meta property="og:url" content="http://pylixm.cc/posts/2015-12-17-Salt-install.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="Salt，一种全新的基础设施管理方式，部署轻松，在几分钟内可运行起来，扩展性好，很容易管理上万台服务器，速度够快，服务器之间秒级通讯。
+salt底层采用动态的连接总线, 使其可以用于编配, 远程执行, 配置管理等等。
+官方文档：https://docs.saltstack.com/en/latest/
+中文文档：http://docs.saltstack.cn/zh_CN/latest/
+中文社区">
+<meta property="og:updated_time" content="2016-05-30T07:37:20.854Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SaltStack学习笔记1-salt安装配置">
+<meta name="twitter:description" content="Salt，一种全新的基础设施管理方式，部署轻松，在几分钟内可运行起来，扩展性好，很容易管理上万台服务器，速度够快，服务器之间秒级通讯。
+salt底层采用动态的连接总线, 使其可以用于编配, 远程执行, 配置管理等等。
+官方文档：https://docs.saltstack.com/en/latest/
+中文文档：http://docs.saltstack.cn/zh_CN/latest/
+中文社区">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> SaltStack学习笔记1-salt安装配置 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SaltStack学习笔记1-salt安装配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-17T23:33:00+08:00" content="2015-12-17">
+              2015-12-17
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/salt/" itemprop="url" rel="index">
+                    <span itemprop="name">salt</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2015-12-17-Salt-install.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2015-12-17-Salt-install.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2015-12-17-Salt-install.html" class="leancloud_visitors" data-flag-title="SaltStack学习笔记1-salt安装配置">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Salt，一种全新的基础设施管理方式，部署轻松，在几分钟内可运行起来，扩展性好，很容易管理上万台服务器，速度够快，服务器之间秒级通讯。</p>
+<p>salt底层采用动态的连接总线, 使其可以用于编配, 远程执行, 配置管理等等。</p>
+<p>官方文档：<a href="https://docs.saltstack.com/en/latest/" target="_blank" rel="external">https://docs.saltstack.com/en/latest/</a></p>
+<p>中文文档：<a href="http://docs.saltstack.cn/zh_CN/latest/" target="_blank" rel="external">http://docs.saltstack.cn/zh_CN/latest/</a></p>
+<p>中文社区：<a href="http://www.saltstack.cn/" target="_blank" rel="external">http://www.saltstack.cn/</a></p>
+<h3 id="0x00-saltstack-安装"><a href="#0x00-saltstack-安装" class="headerlink" title="0x00 saltstack 安装"></a>0x00 saltstack 安装</h3><p>salt安装分为 master 安装和 minion 的安装。</p>
+<p>centos6.6 为例(其他系统见官网：<a href="https://docs.saltstack.com/en/latest/topics/installation/index.html#platform-specific-installation-instructions" target="_blank" rel="external">这里</a>)</p>
+<h4 id="1、开启EPEL"><a href="#1、开启EPEL" class="headerlink" title="1、开启EPEL"></a>1、开启EPEL</h4><p>EPER源(EPEL 是yum的一个软件源，里面包含了许多基本源里没有的软件。)</p>
+<p><del>rpm -Uvh <a href="http://ftp.linux.ncsu.edu/pub/epel/6/i386/epel-release-6-8.noarch.rpm" target="_blank" rel="external">http://ftp.linux.ncsu.edu/pub/epel/6/i386/epel-release-6-8.noarch.rpm</a> </del></p>
+<p>20160303 update:</p>
+<p>rpm –import <a href="https://repo.saltstack.com/yum/redhat/6/x86_64/latest/SALTSTACK-GPG-KEY.pub" target="_blank" rel="external">https://repo.saltstack.com/yum/redhat/6/x86_64/latest/SALTSTACK-GPG-KEY.pub</a></p>
+<p>设置yum 源  <code>/etc/yum.repos.d/saltstack.repo</code></p>
+<pre><code>[saltstack-repo]
+name=SaltStack repo for RHEL/CentOS $releasever
+baseurl=https://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest
+enabled=1
+gpgcheck=1
+gpgkey=https://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest/SALTSTACK-GPG-KEY.pub
+</code></pre><p>更新yum源 </p>
+<p>sudo yum clean expire-cache.</p>
+<p>sudo yum update.</p>
+<h4 id="2、安装master和minion"><a href="#2、安装master和minion" class="headerlink" title="2、安装master和minion"></a>2、安装master和minion</h4><p>Salt的master和minion包是分开的。机器只需要安装相应的包即可运行。通常情况下，会有一个master和多个minions</p>
+<ul>
+<li><p>在salt-master上，运行:</p>
+<p>  <code>yum install salt-master</code></p>
+</li>
+<li><p>在salt-minion上，运行:</p>
+<p>  <code>yum install salt-minion</code></p>
+</li>
+</ul>
+<h3 id="0x01-saltstack-配置"><a href="#0x01-saltstack-配置" class="headerlink" title="0x01 saltstack 配置"></a>0x01 saltstack 配置</h3><h4 id="1-master配置"><a href="#1-master配置" class="headerlink" title="1. master配置"></a>1. master配置</h4><p>配置文件 <code>/etc/salt/master</code> ，master的相关配置在此修改，配置如下。</p>
+<p><code>insterface: 192.168.33.10</code> 绑定master的通信 IP</p>
+<h4 id="2-minion配置"><a href="#2-minion配置" class="headerlink" title="2. minion配置"></a>2. minion配置</h4><p>配置文件 <code>/etc/salt/minion</code> ，minion的配置文件位置同master。minion安装后需要修改配置如下：</p>
+<p><code>master: 192.168.33.10</code> # 指定master的地址</p>
+<h4 id="3-master与minion认证"><a href="#3-master与minion认证" class="headerlink" title="3. master与minion认证"></a>3. master与minion认证</h4><ul>
+<li>启动master </li>
+</ul>
+<p><code>/etc/init.d/salt-master start</code></p>
+<ul>
+<li>启动minion </li>
+</ul>
+<p><code>/etc/init.d/salt-minion start</code></p>
+<ul>
+<li><p>当minion启动时，会向配置文件中配置的master发送自己的key，作为认证实用。key的取值，默认取第一个网卡的ip作为key。也可以在minion配置文件中，配置<code>id: minion的key</code></p>
+</li>
+<li><p>在master 执行 <code>salt-key -L</code> 查看链接此master的所有minion的key。执行 <code>salt-key -a minion的key</code> 来添加minion的认证。</p>
+</li>
+<li><p>执行 <code>salt 192.168.33.11 test.ping</code> 来测试minion的连通性。</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@localhost salt]<span class="comment"># salt-key -L</span></span><br><span class="line">Accepted Keys:</span><br><span class="line">Denied Keys:</span><br><span class="line">Unaccepted Keys:</span><br><span class="line">192.168.33.11</span><br><span class="line">Rejected Keys:</span><br><span class="line">[root@localhost salt]<span class="comment"># salt-key -a 192.168.33.11</span></span><br><span class="line">The following keys are going to be accepted:</span><br><span class="line">Unaccepted Keys:</span><br><span class="line">192.168.33.11</span><br><span class="line">Proceed? [n/Y] y</span><br><span class="line">Key <span class="keyword">for</span> minion 192.168.33.11 accepted.</span><br><span class="line">[root@localhost salt]<span class="comment"># salt-key -L</span></span><br><span class="line">Accepted Keys:</span><br><span class="line">192.168.33.11</span><br><span class="line">Denied Keys:</span><br><span class="line">Unaccepted Keys:</span><br><span class="line">Rejected Keys:</span><br><span class="line">[root@localhost salt]<span class="comment"># salt '192.168.33.11' test.ping </span></span><br><span class="line">192.168.33.11:</span><br><span class="line">    True</span><br></pre></td></tr></table></figure>
+<h4 id="4-其他"><a href="#4-其他" class="headerlink" title="4.其他"></a>4.其他</h4><p>1、默认的日志路径： /var/log/salt</p>
+<p>2、有时使用<code>test.ping</code> 测试minion不通。很大可能是因为认证的问题，注意salt 的认证机制。</p>
+<ul>
+<li><p>启动master， master 会生成秘钥保存在 <code>pki</code> 目录中。</p>
+</li>
+<li><p>启动minion， minion 会生成秘钥也保存在 pki 目录中。</p>
+</li>
+<li><p>master 通过保存在pki中的秘钥做相关认证。</p>
+</li>
+</ul>
+<p>所以，当秘钥发声变化的时候就ping 不通了。此时，可以尝试删除 pki 目录，重启重新认证。</p>
+<h3 id="salt-博客推荐"><a href="#salt-博客推荐" class="headerlink" title="salt 博客推荐"></a>salt 博客推荐</h3><p>在学习salt时，收集到的比较靠谱的博客：</p>
+<p><a href="http://www.xiaomastack.com/category/salt/" target="_blank" rel="external">小马的博客salt系列</a></p>
+<p><a href="http://www.shencan.net/index.php/category/%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4/saltstack/" target="_blank" rel="external">灿哥的Blog</a></p>
+<h3 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h3><p><a href="https://docs.saltstack.com/en/latest/" target="_blank" rel="external">https://docs.saltstack.com/en/latest/</a></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/salt/" rel="tag">#salt</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2015-12-15-Salt-api.html" rel="next" title="SaltStack学习笔记2-- salt-api安装配置(转载)">
+                <i class="fa fa-chevron-left"></i> SaltStack学习笔记2-- salt-api安装配置(转载)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016-01-05-Django-admin.html" rel="prev" title="转载 - Django admin 定制案例">
+                转载 - Django admin 定制案例 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2015-12-17-Salt-install.html"
+           data-title="SaltStack学习笔记1-salt安装配置" data-url="http://pylixm.cc/posts/2015-12-17-Salt-install.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-saltstack-安装"><span class="nav-number">1.</span> <span class="nav-text">0x00 saltstack 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、开启EPEL"><span class="nav-number">1.1.</span> <span class="nav-text">1、开启EPEL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、安装master和minion"><span class="nav-number">1.2.</span> <span class="nav-text">2、安装master和minion</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-saltstack-配置"><span class="nav-number">2.</span> <span class="nav-text">0x01 saltstack 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-master配置"><span class="nav-number">2.1.</span> <span class="nav-text">1. master配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-minion配置"><span class="nav-number">2.2.</span> <span class="nav-text">2. minion配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-master与minion认证"><span class="nav-number">2.3.</span> <span class="nav-text">3. master与minion认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-其他"><span class="nav-number">2.4.</span> <span class="nav-text">4.其他</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#salt-博客推荐"><span class="nav-number">3.</span> <span class="nav-text">salt 博客推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考："><span class="nav-number">4.</span> <span class="nav-text">参考：</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

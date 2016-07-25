@@ -1,0 +1,1100 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,curl," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="对于windows用户如果用Cygwin模拟unix环境的话，里面没有带curl命令，要自己装，所以建议用Gow来模拟，它已经自带了curl工具，安装后直接在cmd环境中用curl命令就可，因为路径已经自动给你配置好了。
+linux curl是一个利用URL规则在命令行下工作的文件传输工具。它支持文件的上传和下载，所以是综合传输工具，但按传统，习惯称url为下载工具。
+　　一，curl命令参数，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="转载 - curl 命令详解">
+<meta property="og:url" content="http://pylixm.cc/posts/2016-03-07-Curl.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="对于windows用户如果用Cygwin模拟unix环境的话，里面没有带curl命令，要自己装，所以建议用Gow来模拟，它已经自带了curl工具，安装后直接在cmd环境中用curl命令就可，因为路径已经自动给你配置好了。
+linux curl是一个利用URL规则在命令行下工作的文件传输工具。它支持文件的上传和下载，所以是综合传输工具，但按传统，习惯称url为下载工具。
+　　一，curl命令参数，">
+<meta property="og:updated_time" content="2016-05-06T03:03:13.374Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="转载 - curl 命令详解">
+<meta name="twitter:description" content="对于windows用户如果用Cygwin模拟unix环境的话，里面没有带curl命令，要自己装，所以建议用Gow来模拟，它已经自带了curl工具，安装后直接在cmd环境中用curl命令就可，因为路径已经自动给你配置好了。
+linux curl是一个利用URL规则在命令行下工作的文件传输工具。它支持文件的上传和下载，所以是综合传输工具，但按传统，习惯称url为下载工具。
+　　一，curl命令参数，">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 转载 - curl 命令详解 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                转载 - curl 命令详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-07T00:00:00+08:00" content="2016-03-07">
+              2016-03-07
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2016-03-07-Curl.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2016-03-07-Curl.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2016-03-07-Curl.html" class="leancloud_visitors" data-flag-title="转载 - curl 命令详解">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p> 对于windows用户如果用Cygwin模拟unix环境的话，里面没有带curl命令，要自己装，所以建议用Gow来模拟，它已经自带了curl工具，安装后直接在cmd环境中用curl命令就可，因为路径已经自动给你配置好了。</p>
+<pre><code>linux curl是一个利用URL规则在命令行下工作的文件传输工具。它支持文件的上传和下载，所以是综合传输工具，但按传统，习惯称url为下载工具。
+</code></pre><p>　　一，curl命令参数，有好多我没有用过，也不知道翻译的对不对，如果有误的地方，还请指正。</p>
+<p>　　-a/–append 上传文件时，附加到目标文件</p>
+<p>　　-A/–user-agent <string>  设置用户代理发送给服务器</string></p>
+<p>　　- anyauth   可以使用“任何”身份验证方法</p>
+<p>　　-b/–cookie <name=string file=""> cookie字符串或文件读取位置</name=string></p>
+<p>　　- basic 使用HTTP基本验证</p>
+<p>　　-B/–use-ascii 使用ASCII /文本传输</p>
+<p>　　-c/–cookie-jar <file> 操作结束后把cookie写入到这个文件中</file></p>
+<p>　　-C/–continue-at <offset>  断点续转</offset></p>
+<p>　　-d/–data <data>   HTTP POST方式传送数据</data></p>
+<p>　　–data-ascii <data>  以ascii的方式post数据</data></p>
+<p>　　–data-binary <data> 以二进制的方式post数据</data></p>
+<p>　　–negotiate     使用HTTP身份验证</p>
+<p>　　–digest        使用数字身份验证</p>
+<p>　　–disable-eprt  禁止使用EPRT或LPRT</p>
+<p>　　–disable-epsv  禁止使用EPSV</p>
+<p>　　-D/–dump-header <file> 把header信息写入到该文件中</file></p>
+<p>　　–egd-file <file> 为随机数据(SSL)设置EGD socket路径</file></p>
+<p>　　–tcp-nodelay   使用TCP_NODELAY选项</p>
+<p>　　-e/–referer 来源网址</p>
+<p>　　-E/–cert <cert[:passwd]> 客户端证书文件和密码 (SSL)</cert[:passwd]></p>
+<p>　　–cert-type <type> 证书文件类型 (DER/PEM/ENG) (SSL)</type></p>
+<p>　　–key <key>     私钥文件名 (SSL)</key></p>
+<p>　　–key-type <type> 私钥文件类型 (DER/PEM/ENG) (SSL)</type></p>
+<p>　　–pass  <pass>  私钥密码 (SSL)</pass></p>
+<p>　　–engine <eng>  加密引擎使用 (SSL). “–engine list” for list</eng></p>
+<p>　　–cacert <file> CA证书 (SSL)</file></p>
+<p>　　–capath <directory> CA目录 (made using c_rehash) to verify peer against (SSL)</directory></p>
+<p>　　–ciphers <list>  SSL密码</list></p>
+<p>　　–compressed    要求返回是压缩的形势 (using deflate or gzip)</p>
+<p>　　–connect-timeout <seconds> 设置最大请求时间</seconds></p>
+<p>　　–create-dirs   建立本地目录的目录层次结构</p>
+<p>　　–crlf          上传是把LF转变成CRLF</p>
+<p>　　-f/–fail          连接失败时不显示http错误</p>
+<p>　　–ftp-create-dirs 如果远程目录不存在，创建远程目录</p>
+<p>　　–ftp-method [multicwd/nocwd/singlecwd] 控制CWD的使用</p>
+<p>　　–ftp-pasv      使用 PASV/EPSV 代替端口</p>
+<p>　　–ftp-skip-pasv-ip 使用PASV的时候,忽略该IP地址</p>
+<p>　　–ftp-ssl       尝试用 SSL/TLS 来进行ftp数据传输</p>
+<p>　　–ftp-ssl-reqd  要求用 SSL/TLS 来进行ftp数据传输</p>
+<p>　　-F/–form <name=content> 模拟http表单提交数据</name=content></p>
+<p>　　-form-string <name=string> 模拟http表单提交数据</name=string></p>
+<p>　　-g/–globoff 禁用网址序列和范围使用{}和[]</p>
+<p>　　-G/–get 以get的方式来发送数据</p>
+<p>　　-h/–help 帮助</p>
+<p>　　-H/–header <line></line>自定义头信息传递给服务器</p>
+<p>　　–ignore-content-length  忽略的HTTP头信息的长度</p>
+<p>　　-i/–include 输出时包括protocol头信息</p>
+<p>　　-I/–head  只显示文档信息</p>
+<p>　　从文件中读取-j/–junk-session-cookies忽略会话Cookie</p>
+<p>　　- 界面<interface>指定网络接口/地址使用</interface></p>
+<p>　　- krb4 &lt;级别&gt;启用与指定的安全级别krb4</p>
+<p>　　-j/–junk-session-cookies 读取文件进忽略session cookie</p>
+<p>　　–interface <interface> 使用指定网络接口/地址</interface></p>
+<p>　　–krb4 <level>  使用指定安全级别的krb4</level></p>
+<p>　　-k/–insecure 允许不使用证书到SSL站点</p>
+<p>　　-K/–config  指定的配置文件读取</p>
+<p>　　-l/–list-only 列出ftp目录下的文件名称</p>
+<p>　　–limit-rate <rate> 设置传输速度</rate></p>
+<p>　　–local-port<num> 强制使用本地端口号</num></p>
+<p>　　-m/–max-time <seconds> 设置最大传输时间</seconds></p>
+<p>　　–max-redirs <num> 设置最大读取的目录数</num></p>
+<p>　　–max-filesize <bytes> 设置最大下载的文件总量</bytes></p>
+<p>　　-M/–manual  显示全手动</p>
+<p>　　-n/–netrc 从netrc文件中读取用户名和密码</p>
+<p>　　–netrc-optional 使用 .netrc 或者 URL来覆盖-n</p>
+<p>　　–ntlm          使用 HTTP NTLM 身份验证</p>
+<p>　　-N/–no-buffer 禁用缓冲输出</p>
+<p>　　-o/–output 把输出写到该文件中</p>
+<p>　　-O/–remote-name 把输出写到该文件中，保留远程文件的文件名</p>
+<p>　　-p/–proxytunnel   使用HTTP代理</p>
+<p>　　–proxy-anyauth 选择任一代理身份验证方法</p>
+<p>　　–proxy-basic   在代理上使用基本身份验证</p>
+<p>　　–proxy-digest  在代理上使用数字身份验证</p>
+<p>　　–proxy-ntlm    在代理上使用ntlm身份验证</p>
+<p>　　-P/–ftp-port <address> 使用端口地址，而不是使用PASV</address></p>
+<p>　　-Q/–quote <cmd>文件传输前，发送命令到服务器</cmd></p>
+<p>　　-r/–range <range>检索来自HTTP/1.1或FTP服务器字节范围</range></p>
+<p>　　–range-file 读取（SSL）的随机文件</p>
+<p>　　-R/–remote-time   在本地生成文件时，保留远程文件时间</p>
+<p>　　–retry <num>   传输出现问题时，重试的次数</num></p>
+<p>　　–retry-delay <seconds>  传输出现问题时，设置重试间隔时间</seconds></p>
+<p>　　–retry-max-time <seconds> 传输出现问题时，设置最大重试时间</seconds></p>
+<p>　　-s/–silent静音模式。不输出任何东西</p>
+<p>　　-S/–show-error   显示错误</p>
+<p>　　–socks4 <host[:port]> 用socks4代理给定主机和端口</host[:port]></p>
+<p>　　–socks5 <host[:port]> 用socks5代理给定主机和端口</host[:port]></p>
+<p>　　–stderr <file><br>-t/–telnet-option <opt=val> Telnet选项设置</opt=val></file></p>
+<p>　　–trace <file>  对指定文件进行debug</file></p>
+<p>　　–trace-ascii <file> Like –跟踪但没有hex输出</file></p>
+<p>　　–trace-time    跟踪/详细输出时，添加时间戳</p>
+<p>　　-T/–upload-file <file> 上传文件</file></p>
+<p>　　–url <url>     Spet URL to work with</url></p>
+<p>　　-u/–user <user[:password]>设置服务器的用户和密码</user[:password]></p>
+<p>　　-U/–proxy-user <user[:password]>设置代理用户名和密码</user[:password]></p>
+<p>　　-v/–verbose</p>
+<p>　　-V/–version 显示版本信息</p>
+<p>　　-w/–write-out [format]什么输出完成后</p>
+<p>　　-x/–proxy <host[:port]>在给定的端口上使用HTTP代理</host[:port]></p>
+<p>　　-X/–request <command>指定什么命令</p>
+<p>　　-y/–speed-time 放弃限速所要的时间。默认为30</p>
+<p>　　-Y/–speed-limit 停止传输速度的限制，速度时间’秒</p>
+<p>　　-z/–time-cond  传送时间设置</p>
+<p>　　-0/–http1.0  使用HTTP 1.0</p>
+<p>　　-1/–tlsv1  使用TLSv1（SSL）</p>
+<p>　　-2/–sslv2 使用SSLv2的（SSL）</p>
+<p>　　-3/–sslv3         使用的SSLv3（SSL）</p>
+<p>　　–3p-quote      like -Q for the source URL for 3rd party transfer</p>
+<p>　　–3p-url        使用url，进行第三方传送</p>
+<p>　　–3p-user       使用用户名和密码，进行第三方传送</p>
+<p>　　-4/–ipv4   使用IP4</p>
+<p>　　-6/–ipv6   使用IP6</p>
+<p>　　-#/–progress-bar 用进度条显示当前的传送状态</p>
+<p>　　-a/–append 上传文件时，附加到目标文件</p>
+<p>　　-A/–user-agent <string>  设置用户代理发送给服务器</string></p>
+<p>　　- anyauth   可以使用“任何”身份验证方法</p>
+<p>　　-b/–cookie <name=string file=""> cookie字符串或文件读取位置</name=string></p>
+<p>　　- basic 使用HTTP基本验证</p>
+<p>　　-B/–use-ascii 使用ASCII /文本传输</p>
+<p>　　-c/–cookie-jar <file> 操作结束后把cookie写入到这个文件中</file></p>
+<p>　　-C/–continue-at <offset>  断点续转</offset></p>
+<p>　　-d/–data <data>   HTTP POST方式传送数据</data></p>
+<p>　　–data-ascii <data>  以ascii的方式post数据</data></p>
+<p>　　–data-binary <data> 以二进制的方式post数据</data></p>
+<p>　　–negotiate     使用HTTP身份验证</p>
+<p>　　–digest        使用数字身份验证</p>
+<p>　　–disable-eprt  禁止使用EPRT或LPRT</p>
+<p>　　–disable-epsv  禁止使用EPSV</p>
+<p>　　-D/–dump-header <file> 把header信息写入到该文件中</file></p>
+<p>　　–egd-file <file> 为随机数据(SSL)设置EGD socket路径</file></p>
+<p>　　–tcp-nodelay   使用TCP_NODELAY选项</p>
+<p>　　-e/–referer 来源网址</p>
+<p>　　-E/–cert <cert[:passwd]> 客户端证书文件和密码 (SSL)</cert[:passwd]></p>
+<p>　　–cert-type <type> 证书文件类型 (DER/PEM/ENG) (SSL)</type></p>
+<p>　　–key <key>     私钥文件名 (SSL)</key></p>
+<p>　　–key-type <type> 私钥文件类型 (DER/PEM/ENG) (SSL)</type></p>
+<p>　　–pass  <pass>  私钥密码 (SSL)</pass></p>
+<p>　　–engine <eng>  加密引擎使用 (SSL). “–engine list” for list</eng></p>
+<p>　　–cacert <file> CA证书 (SSL)</file></p>
+<p>　　–capath <directory> CA目录 (made using c_rehash) to verify peer against (SSL)</directory></p>
+<p>　　–ciphers <list>  SSL密码</list></p>
+<p>　　–compressed    要求返回是压缩的形势 (using deflate or gzip)</p>
+<p>　　–connect-timeout <seconds> 设置最大请求时间</seconds></p>
+<p>　　–create-dirs   建立本地目录的目录层次结构</p>
+<p>　　–crlf          上传是把LF转变成CRLF</p>
+<p>　　-f/–fail          连接失败时不显示http错误</p>
+<p>　　–ftp-create-dirs 如果远程目录不存在，创建远程目录</p>
+<p>　　–ftp-method [multicwd/nocwd/singlecwd] 控制CWD的使用</p>
+<p>　　–ftp-pasv      使用 PASV/EPSV 代替端口</p>
+<p>　　–ftp-skip-pasv-ip 使用PASV的时候,忽略该IP地址</p>
+<p>　　–ftp-ssl       尝试用 SSL/TLS 来进行ftp数据传输</p>
+<p>　　–ftp-ssl-reqd  要求用 SSL/TLS 来进行ftp数据传输</p>
+<p>　　-F/–form <name=content> 模拟http表单提交数据</name=content></p>
+<p>　　-form-string <name=string> 模拟http表单提交数据</name=string></p>
+<p>　　-g/–globoff 禁用网址序列和范围使用{}和[]</p>
+<p>　　-G/–get 以get的方式来发送数据</p>
+<p>　　-h/–help 帮助</p>
+<p>　　-H/–header <line></line>自定义头信息传递给服务器</p>
+<p>　　–ignore-content-length  忽略的HTTP头信息的长度</p>
+<p>　　-i/–include 输出时包括protocol头信息</p>
+<p>　　-I/–head  只显示文档信息</p>
+<p>　　从文件中读取-j/–junk-session-cookies忽略会话Cookie</p>
+<p>　　- 界面<interface>指定网络接口/地址使用</interface></p>
+<p>　　- krb4 &lt;级别&gt;启用与指定的安全级别krb4</p>
+<p>　　-j/–junk-session-cookies 读取文件进忽略session cookie</p>
+<p>　　–interface <interface> 使用指定网络接口/地址</interface></p>
+<p>　　–krb4 <level>  使用指定安全级别的krb4</level></p>
+<p>　　-k/–insecure 允许不使用证书到SSL站点</p>
+<p>　　-K/–config  指定的配置文件读取</p>
+<p>　　-l/–list-only 列出ftp目录下的文件名称</p>
+<p>　　–limit-rate <rate> 设置传输速度</rate></p>
+<p>　　–local-port<num> 强制使用本地端口号</num></p>
+<p>　　-m/–max-time <seconds> 设置最大传输时间</seconds></p>
+<p>　　–max-redirs <num> 设置最大读取的目录数</num></p>
+<p>　　–max-filesize <bytes> 设置最大下载的文件总量<br>-M/–manual  显示全手动</bytes></p>
+<p>　　-n/–netrc 从netrc文件中读取用户名和密码</p>
+<p>　　–netrc-optional 使用 .netrc 或者 URL来覆盖-n</p>
+<p>　　–ntlm          使用 HTTP NTLM 身份验证</p>
+<p>　　-N/–no-buffer 禁用缓冲输出</p>
+<p>　　-o/–output 把输出写到该文件中</p>
+<p>　　-O/–remote-name 把输出写到该文件中，保留远程文件的文件名</p>
+<p>　　-p/–proxytunnel   使用HTTP代理</p>
+<p>　　–proxy-anyauth 选择任一代理身份验证方法</p>
+<p>　　–proxy-basic   在代理上使用基本身份验证</p>
+<p>　　–proxy-digest  在代理上使用数字身份验证</p>
+<p>　　–proxy-ntlm    在代理上使用ntlm身份验证</p>
+<p>　　-P/–ftp-port <address> 使用端口地址，而不是使用PASV</address></p>
+<p>　　-Q/–quote <cmd>文件传输前，发送命令到服务器</cmd></p>
+<p>　　-r/–range <range>检索来自HTTP/1.1或FTP服务器字节范围</range></p>
+<p>　　–range-file 读取（SSL）的随机文件</p>
+<p>　　-R/–remote-time   在本地生成文件时，保留远程文件时间</p>
+<p>　　–retry <num>   传输出现问题时，重试的次数</num></p>
+<p>　　–retry-delay <seconds>  传输出现问题时，设置重试间隔时间</seconds></p>
+<p>　　–retry-max-time <seconds> 传输出现问题时，设置最大重试时间</seconds></p>
+<p>　　-s/–silent静音模式。不输出任何东西</p>
+<p>　　-S/–show-error   显示错误</p>
+<p>　　–socks4 <host[:port]> 用socks4代理给定主机和端口</host[:port]></p>
+<p>　　–socks5 <host[:port]> 用socks5代理给定主机和端口</host[:port]></p>
+<p>　　–stderr <file></file></p>
+<p>　　-t/–telnet-option <opt=val> Telnet选项设置</opt=val></p>
+<p>　　–trace <file>  对指定文件进行debug</file></p>
+<p>　　–trace-ascii <file> Like –跟踪但没有hex输出</file></p>
+<p>　　–trace-time    跟踪/详细输出时，添加时间戳</p>
+<p>　　-T/–upload-file <file> 上传文件</file></p>
+<p>　　–url <url>     Spet URL to work with</url></p>
+<p>　　-u/–user <user[:password]>设置服务器的用户和密码</user[:password]></p>
+<p>　　-U/–proxy-user <user[:password]>设置代理用户名和密码</user[:password]></p>
+<p>　　-v/–verbose</p>
+<p>　　-V/–version 显示版本信息</p>
+<p>　　-w/–write-out [format]什么输出完成后</p>
+<p>　　-x/–proxy <host[:port]>在给定的端口上使用HTTP代理</host[:port]></p>
+<p>　　-X/–request <command>指定什么命令</p>
+<p>　　-y/–speed-time 放弃限速所要的时间。默认为30</p>
+<p>　　-Y/–speed-limit 停止传输速度的限制，速度时间’秒</p>
+<p>　　-z/–time-cond  传送时间设置</p>
+<p>　　-0/–http1.0  使用HTTP 1.0</p>
+<p>　　-1/–tlsv1  使用TLSv1（SSL）</p>
+<p>　　-2/–sslv2 使用SSLv2的（SSL）</p>
+<p>　　-3/–sslv3         使用的SSLv3（SSL）</p>
+<p>　　–3p-quote      like -Q for the source URL for 3rd party transfer</p>
+<p>　　–3p-url        使用url，进行第三方传送</p>
+<p>　　–3p-user       使用用户名和密码，进行第三方传送</p>
+<p>　　-4/–ipv4   使用IP4</p>
+<p>　　-6/–ipv6   使用IP6</p>
+<p>　　-#/–progress-bar 用进度条显示当前的传送状态</p>
+<p>　　二，常用curl实例</p>
+<p>　　1，抓取页面内容到一个文件中</p>
+<p>　　[root@krlcgcms01 mytest]# curl -o home.html  <a href="http://blog.51yip.com" target="_blank" rel="external">http://blog.51yip.com</a></p>
+<p>　　[root@krlcgcms01 mytest]# curl -o home.html  <a href="http://blog.51yip.com" target="_blank" rel="external">http://blog.51yip.com</a></p>
+<p>　　2，用-O（大写的），后面的url要具体到某个文件，不然抓不下来。我们还可以用正则来抓取东西</p>
+<p>　　[root@krlcgcms01 mytest]# curl -O</p>
+<p>　　[root@krlcgcms01 mytest]# curl -O</p>
+<p>　　3，模拟表单信息，模拟登录，保存cookie信息</p>
+<p>　　[root@krlcgcms01 mytest]# curl -c ./cookie_c.txt -F log=aaaa -F pwd=<strong>**</strong> <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　[root@krlcgcms01 mytest]# curl -c ./cookie_c.txt -F log=aaaa -F pwd=<strong>**</strong> <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　4，模拟表单信息，模拟登录，保存头信息</p>
+<p>　　[root@krlcgcms01 mytest]# curl -D ./cookie_D.txt -F log=aaaa -F pwd=<strong>**</strong> <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　[root@krlcgcms01 mytest]# curl -D ./cookie_D.txt -F log=aaaa -F pwd=<strong>**</strong> <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　-c(小写)产生的cookie和-D里面的cookie是不一样的。</p>
+<p>　　5，使用cookie文件</p>
+<p>　　[root@krlcgcms01 mytest]# curl -b ./cookie_c.txt  <a href="http://blog.51yip.com/wp-admin" target="_blank" rel="external">http://blog.51yip.com/wp-admin</a></p>
+<p>　　[root@krlcgcms01 mytest]# curl -b ./cookie_c.txt  <a href="http://blog.51yip.com/wp-admin" target="_blank" rel="external">http://blog.51yip.com/wp-admin</a></p>
+<p>　　6，断点续传，-C(大写的)</p>
+<p>　　[root@krlcgcms01 mytest]# curl -C -O</p>
+<p>　　7，传送数据,最好用登录页面测试，因为你传值过去后，curl回抓数据，你可以看到你传值有没有成功</p>
+<p>　　[root@krlcgcms01 mytest]# curl -d log=aaaa  <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　[root@krlcgcms01 mytest]# curl -d log=aaaa  <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　8，显示抓取错误，下面这个例子，很清楚的表明了。</p>
+<p>　　[root@krlcgcms01 mytest]# curl -f <a href="http://blog.51yip.com/asdf" target="_blank" rel="external">http://blog.51yip.com/asdf</a></p>
+<p>　　curl: (22) The requested URL returned error: 404</p>
+<p>　　[root@krlcgcms01 mytest]# curl <a href="http://blog.51yip.com/asdf" target="_blank" rel="external">http://blog.51yip.com/asdf</a></p>
+<p>　　<html><head><title>404,not found</title></head></html></p>
+<p>　　。。。。。。。。。。。。</p>
+<p>　　[root@krlcgcms01 mytest]# curl -f <a href="http://blog.51yip.com/asdf" target="_blank" rel="external">http://blog.51yip.com/asdf</a></p>
+<p>　　curl: (22) The requested URL returned error: 404</p>
+<p>　　[root@krlcgcms01 mytest]# curl <a href="http://blog.51yip.com/asdf" target="_blank" rel="external">http://blog.51yip.com/asdf</a></p>
+<p>　　<html><head><title>404,not found</title></head></html></p>
+<p>　　。。。。。。。。。。。。</p>
+<p>　　9，伪造来源地址，有的网站会判断，请求来源地址。</p>
+<p>　　[root@krlcgcms01 mytest]# curl -e <a href="http://localhost" target="_blank" rel="external">http://localhost</a> <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　[root@krlcgcms01 mytest]# curl -e <a href="http://localhost" target="_blank" rel="external">http://localhost</a> <a href="http://blog.51yip.com/wp-login.php" target="_blank" rel="external">http://blog.51yip.com/wp-login.php</a></p>
+<p>　　10，当我们经常用curl去搞人家东西的时候，人家会把你的IP给屏蔽掉的,这个时候,我们可以用代理</p>
+<p>　　[root@krlcgcms01 mytest]# curl -x 24.10.28.84:32779 -o home.html <a href="http://blog.51yip.com" target="_blank" rel="external">http://blog.51yip.com</a></p>
+<p>　　[root@krlcgcms01 mytest]# curl -x 24.10.28.84:32779 -o home.html <a href="http://blog.51yip.com" target="_blank" rel="external">http://blog.51yip.com</a><br>11，比较大的东西，我们可以分段下载</p>
+<p>　　[root@krlcgcms01 mytest]# curl -r 0-100 -o img.part1 <a href="http://blog.51yip.com/wp-" target="_blank" rel="external">http://blog.51yip.com/wp-</a></p>
+<p>　　content/uploads/2010/09/compare_varnish.jpg</p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　100   101  100   101    0     0    105      0 –:–:– –:–:– –:–:–     0</p>
+<p>　　[root@krlcgcms01 mytest]# curl -r 100-200 -o img.part2 <a href="http://blog.51yip.com/wp-" target="_blank" rel="external">http://blog.51yip.com/wp-</a></p>
+<p>　　content/uploads/2010/09/compare_varnish.jpg</p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　100   101  100   101    0     0     57      0  0:00:01  0:00:01 –:–:–     0</p>
+<p>　　[root@krlcgcms01 mytest]# curl -r 200- -o img.part3 <a href="http://blog.51yip.com/wp-" target="_blank" rel="external">http://blog.51yip.com/wp-</a></p>
+<p>　　content/uploads/2010/09/compare_varnish.jpg</p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　100  104k  100  104k    0     0  52793      0  0:00:02  0:00:02 –:–:– 88961</p>
+<p>　　[root@krlcgcms01 mytest]# ls |grep part | xargs du -sh</p>
+<p>　　4.0K    one.part1</p>
+<p>　　112K    three.part3</p>
+<p>　　4.0K    two.part2</p>
+<p>　　[root@krlcgcms01 mytest]# curl -r 0-100 -o img.part1 <a href="http://blog.51yip.com/wp-" target="_blank" rel="external">http://blog.51yip.com/wp-</a></p>
+<p>　　content/uploads/2010/09/compare_varnish.jpg</p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　100   101  100   101    0     0    105      0 –:–:– –:–:– –:–:–     0</p>
+<p>　　[root@krlcgcms01 mytest]# curl -r 100-200 -o img.part2 <a href="http://blog.51yip.com/wp-" target="_blank" rel="external">http://blog.51yip.com/wp-</a></p>
+<p>　　content/uploads/2010/09/compare_varnish.jpg</p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　100   101  100   101    0     0     57      0  0:00:01  0:00:01 –:–:–     0</p>
+<p>　　[root@krlcgcms01 mytest]# curl -r 200- -o img.part3 <a href="http://blog.51yip.com/wp-" target="_blank" rel="external">http://blog.51yip.com/wp-</a></p>
+<p>　　content/uploads/2010/09/compare_varnish.jpg</p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　100  104k  100  104k    0     0  52793      0  0:00:02  0:00:02 –:–:– 88961</p>
+<p>　　[root@krlcgcms01 mytest]# ls |grep part | xargs du -sh</p>
+<p>　　4.0K    one.part1</p>
+<p>　　112K    three.part3</p>
+<p>　　4.0K    two.part2</p>
+<p>　　用的时候，把他们cat一下就OK了,cat img.part* &gt;img.jpg</p>
+<p>　　12，不会显示下载进度信息</p>
+<p>　　[root@krlcgcms01 mytest]# curl -s -o aaa.jpg </p>
+<p>　　13，显示下载进度条</p>
+<p>　　[root@krlcgcms01 mytest]# curl -# -O </p>
+<p>　　######################################################################## 100.0%</p>
+<p>　　14,通过ftp下载文件</p>
+<p>　　[zhangy@BlackGhost ~]$ curl -u 用户名:密码 -O <a href="http://blog.51yip.com/demo/curtain/bbstudy_files/style.css" target="_blank" rel="external">http://blog.51yip.com/demo/curtain/bbstudy_files/style.css</a></p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　101  1934  101  1934    0     0   3184      0 –:–:– –:–:– –:–:–  7136</p>
+<p>　　[zhangy@BlackGhost ~]$ curl -u 用户名:密码 -O <a href="http://blog.51yip.com/demo/curtain/bbstudy_files/style.css" target="_blank" rel="external">http://blog.51yip.com/demo/curtain/bbstudy_files/style.css</a></p>
+<p>　　% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</p>
+<p>　　Dload  Upload   Total   Spent    Left  Speed</p>
+<p>　　101  1934  101  1934    0     0   3184      0 –:–:– –:–:– –:–:–  7136</p>
+<p>　　或者用下面的方式</p>
+<p>　　[zhangy@BlackGhost ~]$ curl -O ftp://用户名:密码@ip:port/demo/curtain/bbstudy_files/style.css</p>
+<p>　　[zhangy@BlackGhost ~]$ curl -O ftp://用户名:密码@ip:port/demo/curtain/bbstudy_files/style.css</p>
+<p>　　15，通过ftp上传</p>
+<p>　　[zhangy@BlackGhost ~]$ curl -T test.sql ftp://用户名:密码@ip:port/demo/curtain/bbstudy_files/</p>
+<p>　　[zhangy@BlackGhost ~]$ curl -T test.sql ftp://用户名:密码@ip:port/demo/curtain/bbstudy_files/</p>
+<p>原文出处：<a href="http://linux.chinaitlab.com/command/830656.html" target="_blank" rel="external">http://linux.chinaitlab.com/command/830656.html</a></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/curl/" rel="tag">#curl</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2016-02-22-Summary.html" rel="next" title="2015总结，2016计划">
+                <i class="fa fa-chevron-left"></i> 2015总结，2016计划
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016-03-08-Celery-gotchas.html" rel="prev" title="译-使用 celery 时的 3 个坑">
+                译-使用 celery 时的 3 个坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2016-03-07-Curl.html"
+           data-title="转载 - curl 命令详解" data-url="http://pylixm.cc/posts/2016-03-07-Curl.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

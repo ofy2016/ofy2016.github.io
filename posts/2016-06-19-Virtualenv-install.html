@@ -1,0 +1,848 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="virtualenv,pyenv," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="配置环境：
+
+CentOS release 6.8
+pyenv 20160509
+
+在工作开发中，一直使用 virtualenv 来管理python的包环境。很好的解决了不同项目使用不同python包的需求。对于多python版本的问题如何解决一直无解，虽然可以安装多个
+版本的python，靠绝对路径或靠创建虚拟环境的时候指定python（virtualenv -p）版本来解决，但总感觉不是那么的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 pyenv + virtualenv 打造多版本python开发环境">
+<meta property="og:url" content="http://pylixm.cc/posts/2016-06-19-Virtualenv-install.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="配置环境：
+
+CentOS release 6.8
+pyenv 20160509
+
+在工作开发中，一直使用 virtualenv 来管理python的包环境。很好的解决了不同项目使用不同python包的需求。对于多python版本的问题如何解决一直无解，虽然可以安装多个
+版本的python，靠绝对路径或靠创建虚拟环境的时候指定python（virtualenv -p）版本来解决，但总感觉不是那么的">
+<meta property="og:updated_time" content="2016-06-19T04:03:55.924Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 pyenv + virtualenv 打造多版本python开发环境">
+<meta name="twitter:description" content="配置环境：
+
+CentOS release 6.8
+pyenv 20160509
+
+在工作开发中，一直使用 virtualenv 来管理python的包环境。很好的解决了不同项目使用不同python包的需求。对于多python版本的问题如何解决一直无解，虽然可以安装多个
+版本的python，靠绝对路径或靠创建虚拟环境的时候指定python（virtualenv -p）版本来解决，但总感觉不是那么的">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 使用 pyenv + virtualenv 打造多版本python开发环境 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用 pyenv + virtualenv 打造多版本python开发环境
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-19T00:00:00+08:00" content="2016-06-19">
+              2016-06-19
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/vcs/" itemprop="url" rel="index">
+                    <span itemprop="name">vcs</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2016-06-19-Virtualenv-install.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2016-06-19-Virtualenv-install.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2016-06-19-Virtualenv-install.html" class="leancloud_visitors" data-flag-title="使用 pyenv + virtualenv 打造多版本python开发环境">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>配置环境：</p>
+<ul>
+<li>CentOS release 6.8</li>
+<li>pyenv 20160509</li>
+</ul>
+<p>在工作开发中，一直使用 <code>virtualenv</code> 来管理python的包环境。很好的解决了不同项目使用不同python包的需求。对于多python版本的问题如何解决一直无解，虽然可以安装多个</p>
+<p>版本的python，靠绝对路径或靠创建虚拟环境的时候指定python（<code>virtualenv -p</code>）版本来解决，但总感觉不是那么的优雅。同事推荐了 <code>pyenv</code> ，一直没用过，特从网上找了些资料试着配置了下，记录如下。</p>
+<h2 id="pyenv-vs-virtualenv"><a href="#pyenv-vs-virtualenv" class="headerlink" title="pyenv vs virtualenv"></a>pyenv vs virtualenv</h2><p>pyenv 是针对 python 版本的管理，通过修改环境变量的方式实现；</p>
+<p>virtualenv 是针对python的包的多版本管理，通过将python包安装到一个模块来作为python的包虚拟环境，通过切换目录来实现不同包环境间的切换。</p>
+<h2 id="pyenv-原理"><a href="#pyenv-原理" class="headerlink" title="pyenv 原理"></a>pyenv 原理</h2><p>pyenv 的美好之处在于，它并没有使用将不同的 $PATH 植入不同的 shell 这种高耦合的工作方式，而是简单地在 $PATH 的最前面插入了一个垫片路径（shims）：</p>
+<p><code>~/.pyenv/shims:/usr/local/bin:/usr/bin:/bin</code>。所有对 Python 可执行文件的查找都会首先被这个 shims 路径截获，从而架空了后面的系统路径。</p>
+<h2 id="pyenv-安装使用"><a href="#pyenv-安装使用" class="headerlink" title="pyenv 安装使用"></a>pyenv 安装使用</h2><h3 id="自动安装"><a href="#自动安装" class="headerlink" title="自动安装"></a>自动安装</h3><p>pyenv 提供了自动安装的工具，执行命令安装即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash</span><br></pre></td></tr></table></figure>
+<p>需保证系统有 <code>git</code> ，否则需要新安装git工具。</p>
+<h3 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h3><p>将 pyenv 检出到你想安装的目录。建议路径为：$HOME/.pyenv</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd</span><br><span class="line">$ git clone git://github.com/yyuu/pyenv.git .pyenv</span><br></pre></td></tr></table></figure>
+<p>添加环境变量。PYENV_ROOT 指向 pyenv 检出的根目录，并向 $PATH 添加 $PYENV_ROOT/bin 以提供访问 pyenv 这条命令的路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ echo &apos;export PYENV_ROOT=&quot;$HOME/.pyenv&quot;&apos; &gt;&gt; ~/.bash_profile</span><br><span class="line">$ echo &apos;export PATH=&quot;$PYENV_ROOT/bin:$PATH&quot;&apos; &gt;&gt; ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<p>这里的 shell 配置文件（~/.bash_profile）依不同 Linux 而需作修改——Zsh：~/.zshenv；Ubuntu：~/.bashrc <br></p>
+<p>向 shell 添加 pyenv init 以启用 shims 和命令补完功能<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ echo &apos;eval &quot;$(pyenv init -)&quot;&apos; &gt;&gt; ~/.bash_profile</span><br></pre></td></tr></table></figure></p>
+<p>配置文件的位置同上一条一样需要修改 <br></p>
+<p>重启 shell（因为修改了 $PATH）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ exec $SHELL</span><br></pre></td></tr></table></figure>
+<h3 id="pyenv-常用命令"><a href="#pyenv-常用命令" class="headerlink" title="pyenv 常用命令"></a>pyenv 常用命令</h3><h4 id="python配置"><a href="#python配置" class="headerlink" title="python配置"></a>python配置</h4><p><code>$ pyenv versions</code>  – 查看系统当前安装的python列表</p>
+<p><code>$ pyenv install -v 3.5.1</code>  – 安装python</p>
+<p><code>$ pyenv uninstall 2.7.3</code>  – 卸载python</p>
+<p><code>$ pyenv rehash</code>  – 创建垫片路径（为所有已安装的可执行文件 （如：~/.pyenv/versions/<em>/bin/</em>） 创建 shims，因此，每当你增删了 Python 版本或带有可执行文件的包（如 pip）以后，都应该执行一次本命令）</p>
+<h4 id="python切换"><a href="#python切换" class="headerlink" title="python切换"></a>python切换</h4><p><code>$ pyenv global 3.4.0</code> – 设置全局的 Python 版本，通过将版本号写入 ~/.pyenv/version 文件的方式。</p>
+<p><code>$ pyenv local 2.7.3</code>  – 设置面向程序的本地版本，通过将版本号写入当前目录下的 .python-version 文件的方式。通过这种方式设置的 Python 版本优先级较 global 高。</p>
+<p>pyenv 会从当前目录开始向上逐级查找 .python-version 文件，直到根目录为止。若找不到，就用 global 版本。</p>
+<p><code>$ pyenv shell pypy-2.2.1</code> – 设置面向 shell 的 Python 版本，通过设置当前 shell 的 PYENV_VERSION 环境变量的方式。这个版本的优先级比 local 和 global 都要高。–unset 参数可以用于取消当前 shell 设定的版本。</p>
+<p><code>$ pyenv shell --unset</code> </p>
+<h4 id="python优先级"><a href="#python优先级" class="headerlink" title="python优先级"></a>python优先级</h4><p><code>shell &gt; local &gt; global</code></p>
+<h2 id="pyenv-插件-pyenv-virtualenv"><a href="#pyenv-插件-pyenv-virtualenv" class="headerlink" title="pyenv 插件: pyenv-virtualenv"></a>pyenv 插件: pyenv-virtualenv</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>使用自动安装pyenv 后，它会自动安装部分插件，通过<code>pyenv-virtualenv</code> 插件可以很好的和 <code>virtualenv</code> 结合：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@linux3311 ~]# cd .pyenv/plugins/</span><br><span class="line">[root@linux3311 plugins]# ll</span><br><span class="line">insgesamt 24</span><br><span class="line">drwxr-xr-x. 4 root root 4096 19. Jun 05:17 pyenv-doctor</span><br><span class="line">drwxr-xr-x. 5 root root 4096 19. Jun 05:18 pyenv-installer</span><br><span class="line">drwxr-xr-x. 4 root root 4096 19. Jun 05:18 pyenv-update</span><br><span class="line">drwxr-xr-x. 7 root root 4096 19. Jun 05:18 pyenv-virtualenv</span><br><span class="line">drwxr-xr-x. 4 root root 4096 19. Jun 05:18 pyenv-which-ext</span><br><span class="line">drwxr-xr-x. 5 root root 4096 19. Jun 05:17 python-build</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>创建虚拟环境 </li>
+</ul>
+<p><code>$ pyenv virtualenv 2.7.10 my-virtual-env-2.7.10</code> </p>
+<p>若不指定python 版本，会汇报认使用当前环境python版本。</p>
+<ul>
+<li>列出当前虚拟环境</li>
+</ul>
+<p><code>pyenv virtualenvs</code></p>
+<ul>
+<li>激活虚拟环境</li>
+</ul>
+<p><code>pyenv activate</code></p>
+<ul>
+<li>退出虚拟环境</li>
+</ul>
+<p><code>pyenv deactivate</code></p>
+<ul>
+<li>删除虚拟环境</li>
+</ul>
+<p><code>pyenv uninstall my-virtual-env</code></p>
+<p>使用pyenv 来管理python，使用 pyenv-virtualenv 插件来管理多版本 python包。</p>
+<p>此时，还需注意，当我们将项目运行的 env 环境部署到生产环境时，由于我们的python 包是依赖python 的，需要注意生产环境的python版本问题(详见 <a href="http://pylixm.cc/posts/2016-01-18-Virtualenv-user.html">这里</a>)。</p>
+<p>以上为个人拙见，欢迎小伙伴们留言交流。小伙伴们若有更好的python 多版本环境管理方案，希望留言不吝赐教，在此，先谢过了！ </p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>pyenv 下载地址 <a href="https://github.com/yyuu/pyenv/" target="_blank" rel="external">这里</a><br>virtualenv 中文文档地址 <a href="http://virtualenv-chinese-docs.readthedocs.io/en/latest/#" target="_blank" rel="external">这里</a><br><a href="http://my.oschina.net/lionets/blog/267469" target="_blank" rel="external">http://my.oschina.net/lionets/blog/267469</a><br><a href="https://github.com/yyuu/pyenv-virtualenv" target="_blank" rel="external">https://github.com/yyuu/pyenv-virtualenv</a></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/virtualenv/" rel="tag">#virtualenv</a>
+          
+            <a href="/tags/pyenv/" rel="tag">#pyenv</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2016-06-03-Mongodb-user-admin.html" rel="next" title="mongodb 3.2 用户权限管理配置">
+                <i class="fa fa-chevron-left"></i> mongodb 3.2 用户权限管理配置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016-06-19-Best.Practices.for.Django.1.8.3rd-Chapter-7.html" rel="prev" title="Django 最佳实践-读书笔记 - 第七章 查询与数据库层">
+                Django 最佳实践-读书笔记 - 第七章 查询与数据库层 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2016-06-19-Virtualenv-install.html"
+           data-title="使用 pyenv + virtualenv 打造多版本python开发环境" data-url="http://pylixm.cc/posts/2016-06-19-Virtualenv-install.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pyenv-vs-virtualenv"><span class="nav-number">1.</span> <span class="nav-text">pyenv vs virtualenv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pyenv-原理"><span class="nav-number">2.</span> <span class="nav-text">pyenv 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pyenv-安装使用"><span class="nav-number">3.</span> <span class="nav-text">pyenv 安装使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自动安装"><span class="nav-number">3.1.</span> <span class="nav-text">自动安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动安装"><span class="nav-number">3.2.</span> <span class="nav-text">手动安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyenv-常用命令"><span class="nav-number">3.3.</span> <span class="nav-text">pyenv 常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#python配置"><span class="nav-number">3.3.1.</span> <span class="nav-text">python配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python切换"><span class="nav-number">3.3.2.</span> <span class="nav-text">python切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python优先级"><span class="nav-number">3.3.3.</span> <span class="nav-text">python优先级</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pyenv-插件-pyenv-virtualenv"><span class="nav-number">4.</span> <span class="nav-text">pyenv 插件: pyenv-virtualenv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">4.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">4.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

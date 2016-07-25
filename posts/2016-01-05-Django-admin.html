@@ -1,0 +1,806 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="django," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="总体思路：重写admin.ModelAdmin中的某些方法。
+1234567891011121314151617181920212223242526272829303132from django.db import models class Blog(models.Model):    name = models.CharField(max_length=100)    tagline = mod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="转载 - Django admin 定制案例">
+<meta property="og:url" content="http://pylixm.cc/posts/2016-01-05-Django-admin.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="总体思路：重写admin.ModelAdmin中的某些方法。
+1234567891011121314151617181920212223242526272829303132from django.db import models class Blog(models.Model):    name = models.CharField(max_length=100)    tagline = mod">
+<meta property="og:updated_time" content="2016-06-30T06:39:25.202Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="转载 - Django admin 定制案例">
+<meta name="twitter:description" content="总体思路：重写admin.ModelAdmin中的某些方法。
+1234567891011121314151617181920212223242526272829303132from django.db import models class Blog(models.Model):    name = models.CharField(max_length=100)    tagline = mod">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 转载 - Django admin 定制案例 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                转载 - Django admin 定制案例
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-05T20:00:00+08:00" content="2016-01-05">
+              2016-01-05
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2016-01-05-Django-admin.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2016-01-05-Django-admin.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2016-01-05-Django-admin.html" class="leancloud_visitors" data-flag-title="转载 - Django admin 定制案例">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>总体思路：重写<code>admin.ModelAdmin</code>中的某些方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blog</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line">    tagline = models.TextField()</span><br><span class="line">  </span><br><span class="line">    <span class="comment"># On Python 3: def __str__(self):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__unicode__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    email = models.EmailField()</span><br><span class="line">  </span><br><span class="line">    <span class="comment"># On Python 3: def __str__(self):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__unicode__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Entry</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    blog = models.ForeignKey(Blog)</span><br><span class="line">    headline = models.CharField(max_length=<span class="number">255</span>)</span><br><span class="line">    body_text = models.TextField()</span><br><span class="line">    pub_date = models.DateField()</span><br><span class="line">    mod_date = models.DateField()</span><br><span class="line">    authors = models.ManyToManyField(Author)</span><br><span class="line">    n_comments = models.IntegerField()</span><br><span class="line">    n_pingbacks = models.IntegerField()</span><br><span class="line">    rating = models.IntegerField()</span><br><span class="line">  </span><br><span class="line">    <span class="comment"># On Python 3: def __str__(self):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__unicode__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.headline</span><br></pre></td></tr></table></figure>
+<h3 id="类级别权限"><a href="#类级别权限" class="headerlink" title="类级别权限"></a>类级别权限</h3><p>默认情况下，superuser可以访问admin界面的所有Model，但有时候只想让一些用户只能访问一些特定的Model。</p>
+<p>可以定制自己的User对象的has_perm()方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyUser</span><span class="params">(AbstractBaseUser)</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">has_perm</span><span class="params">(self, perm, obj=None)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.is_superuser:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">elif</span> self.can_edit:</span><br><span class="line">            <span class="keyword">if</span> perm==<span class="string">'myapp.add_entry'</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<p>这样superuser具有全部权限。普通user的can_edit属性为True时，就具有了创建Entry实例的权限，其余用户无权限。</p>
+<p>也可以定制ModelAdmin的has_add_permission(),has_change_permission(),has_delete_permission()方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">has_add_permission</span><span class="params">(self, request)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Returns True if the given request has permission to add an object.</span><br><span class="line">    Can be overridden by the user in subclasses.</span><br><span class="line">    """</span></span><br><span class="line">    opts = self.opts</span><br><span class="line">    codename = get_permission_codename(<span class="string">'add'</span>, opts)</span><br><span class="line">    <span class="keyword">if</span> request.user.can_edit:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> request.user.has_perm(<span class="string">"%s.%s"</span> % (opts.app_label, codename))</span><br></pre></td></tr></table></figure>
+<h3 id="字段级别的权限"><a href="#字段级别的权限" class="headerlink" title="字段级别的权限"></a>字段级别的权限</h3><p>不同权限的可以编辑不同的内容，可以通过get_readonly_fileds()来添加字段只读权限。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EntryAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    list_display=(...)</span><br><span class="line">    search_fields=(...)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_readonly_fields</span><span class="params">(self,request,obj=None)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> request.user.is_superuser <span class="keyword">and</span> <span class="keyword">not</span> request.user.can_edit:</span><br><span class="line">            <span class="keyword">return</span> [f.name <span class="keyword">for</span> f <span class="keyword">in</span> self.model._meta.fields]</span><br><span class="line">        <span class="keyword">return</span> self.readonly_fields</span><br></pre></td></tr></table></figure>
+<h3 id="重写Model的save行为"><a href="#重写Model的save行为" class="headerlink" title="重写Model的save行为"></a>重写Model的save行为</h3><p>可以直接重写model的save()方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blog</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line">    tagline = models.TextField()</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        do_something()</span><br><span class="line">        super(Blog, self).save(*args, **kwargs) <span class="comment"># Call the "real" save() method.</span></span><br><span class="line">        do_something_else()</span><br></pre></td></tr></table></figure>
+<p>阻止save()：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blog</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line">    tagline = models.TextField()</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.name == <span class="string">"Yoko Ono's blog"</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="comment"># Yoko shall never have her own blog!</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            super(Blog, self).save(*args, **kwargs) <span class="comment"># Call the "real" save() method.</span></span><br></pre></td></tr></table></figure>
+<p>也可以重写ModelAdmin的save_model()方法，根据不同的用户定制不同的save行为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArticleAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save_model</span><span class="params">(self, request, obj, form, change)</span>:</span></span><br><span class="line">        obj.user = request.user</span><br><span class="line">        obj.save()</span><br></pre></td></tr></table></figure>
+<p>其中obj是修改后的对象，当新建一个对象时 change = False, 当修改一个对象时 change = True，可以获得修改前的对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArticleAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save_model</span><span class="params">(self, request, obj, form, change)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> change:</span><br><span class="line">            obj_old = self.model.objects.get(pk=obj.pk)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            obj_old = <span class="keyword">None</span></span><br><span class="line">        obj.user = request.user</span><br><span class="line">        obj.save()</span><br></pre></td></tr></table></figure>
+<h3 id="不同的用户显示不同的数据行，重写列表页面返回的查询集"><a href="#不同的用户显示不同的数据行，重写列表页面返回的查询集" class="headerlink" title="不同的用户显示不同的数据行，重写列表页面返回的查询集"></a>不同的用户显示不同的数据行，重写列表页面返回的查询集</h3><p>ModelAdmin提供了一个钩子程序 —— 它有一个名为queryset() 的方法，该方法可以确定任何列表页面返回的默认查询集。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyModelAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_queryset</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        qs = super(MyModelAdmin, self).get_queryset(request)</span><br><span class="line">        <span class="keyword">if</span> request.user.is_superuser:</span><br><span class="line">            <span class="keyword">return</span> qs</span><br><span class="line">        <span class="keyword">return</span> qs.filter(author=request.user)</span><br></pre></td></tr></table></figure>
+<h3 id="定制过滤器list-filter"><a href="#定制过滤器list-filter" class="headerlink" title="定制过滤器list_filter"></a>定制过滤器list_filter</h3><p>从django.contrib.admin.SimpleListFilter继承一个子类，提供title和parameter_name属性，并重写 lookups和queryset方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.utils.translation <span class="keyword">import</span> ugettext_lazy <span class="keyword">as</span> _</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecadeBornListFilter</span><span class="params">(admin.SimpleListFilter)</span>:</span></span><br><span class="line">    <span class="comment"># Human-readable title which will be displayed in the</span></span><br><span class="line">    <span class="comment"># right admin sidebar just above the filter options.</span></span><br><span class="line">    title = _(<span class="string">'decade born'</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># Parameter for the filter that will be used in the URL query.</span></span><br><span class="line">    parameter_name = <span class="string">'decade'</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lookups</span><span class="params">(self, request, model_admin)</span>:</span></span><br><span class="line">        <span class="string">"""</span><br><span class="line">        Returns a list of tuples. The first element in each</span><br><span class="line">        tuple is the coded value for the option that will</span><br><span class="line">        appear in the URL query. The second element is the</span><br><span class="line">        human-readable name for the option that will appear</span><br><span class="line">        in the right sidebar.</span><br><span class="line">        """</span></span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            (<span class="string">'80s'</span>, _(<span class="string">'in the eighties'</span>)),</span><br><span class="line">            (<span class="string">'90s'</span>, _(<span class="string">'in the nineties'</span>)),</span><br><span class="line">        )</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryset</span><span class="params">(self, request, queryset)</span>:</span></span><br><span class="line">        <span class="string">"""</span><br><span class="line">        Returns the filtered queryset based on the value</span><br><span class="line">        provided in the query string and retrievable via</span><br><span class="line">        `self.value()`.</span><br><span class="line">        """</span></span><br><span class="line">        <span class="comment"># Compare the requested value (either '80s' or '90s')</span></span><br><span class="line">        <span class="comment"># to decide how to filter the queryset.</span></span><br><span class="line">        <span class="keyword">if</span> self.value() == <span class="string">'80s'</span>:</span><br><span class="line">            <span class="keyword">return</span> queryset.filter(birthday__gte=date(<span class="number">1980</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">                                    birthday__lte=date(<span class="number">1989</span>, <span class="number">12</span>, <span class="number">31</span>))</span><br><span class="line">        <span class="keyword">if</span> self.value() == <span class="string">'90s'</span>:</span><br><span class="line">            <span class="keyword">return</span> queryset.filter(birthday__gte=date(<span class="number">1990</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">                                    birthday__lte=date(<span class="number">1999</span>, <span class="number">12</span>, <span class="number">31</span>))</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PersonAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    list_filter = (DecadeBornListFilter,)</span><br></pre></td></tr></table></figure>
+<p>parameter_name和title是必须的。look_up方法返回出现在列表页右侧过滤器中的选项和描述。parameter_name为附加在url后面get请求的参数名，self.value()返回该参数对应的值。</p>
+<p>根据不同的用户定制：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AuthDecadeBornListFilter</span><span class="params">(DecadeBornListFilter)</span>:</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lookups</span><span class="params">(self, request, model_admin)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> request.user.is_superuser:</span><br><span class="line">            <span class="keyword">return</span> super(AuthDecadeBornListFilter,</span><br><span class="line">                self).lookups(request, model_admin)</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryset</span><span class="params">(self, request, queryset)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> request.user.is_superuser:</span><br><span class="line">            <span class="keyword">return</span> super(AuthDecadeBornListFilter,</span><br><span class="line">                self).queryset(request, queryset)</span><br></pre></td></tr></table></figure>
+<p>model_admin为ModelAdmin实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdvancedDecadeBornListFilter</span><span class="params">(DecadeBornListFilter)</span>:</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lookups</span><span class="params">(self, request, model_admin)</span>:</span></span><br><span class="line">        <span class="string">"""</span><br><span class="line">        Only show the lookups if there actually is</span><br><span class="line">        anyone born in the corresponding decades.</span><br><span class="line">        """</span></span><br><span class="line">        qs = model_admin.get_queryset(request)</span><br><span class="line">        <span class="keyword">if</span> qs.filter(birthday__gte=date(<span class="number">1980</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">                      birthday__lte=date(<span class="number">1989</span>, <span class="number">12</span>, <span class="number">31</span>)).exists():</span><br><span class="line">            <span class="keyword">yield</span> (<span class="string">'80s'</span>, _(<span class="string">'in the eighties'</span>))</span><br><span class="line">        <span class="keyword">if</span> qs.filter(birthday__gte=date(<span class="number">1990</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">                      birthday__lte=date(<span class="number">1999</span>, <span class="number">12</span>, <span class="number">31</span>)).exists():</span><br><span class="line">            <span class="keyword">yield</span> (<span class="string">'90s'</span>, _(<span class="string">'in the nineties'</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="定制搜索功能"><a href="#定制搜索功能" class="headerlink" title="定制搜索功能"></a>定制搜索功能</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PersonAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    list_display = (<span class="string">'name'</span>, <span class="string">'age'</span>)</span><br><span class="line">    search_fields = (<span class="string">'name'</span>,)</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_search_results</span><span class="params">(self, request, queryset, search_term)</span>:</span></span><br><span class="line">        queryset, use_distinct = super(PersonAdmin, self).get_search_results(request, queryset, search_term)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            search_term_as_int = int(search_term)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            queryset |= self.model.objects.filter(age=search_term_as_int)</span><br><span class="line">        <span class="keyword">return</span> queryset, use_distinct</span><br></pre></td></tr></table></figure>
+<p>queryset是查询集，search_term是搜索词。</p>
+<h3 id="外键字段过滤"><a href="#外键字段过滤" class="headerlink" title="外键字段过滤"></a>外键字段过滤</h3><p>在添加对象时显示外键选项时，太多的选项不太友好，这时候需要过滤出符合要求的对象供选择。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyModelAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">formfield_for_foreignkey</span><span class="params">(self, db_field, request, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> db_field.name == <span class="string">"car"</span>:</span><br><span class="line">            kwargs[<span class="string">"queryset"</span>] = Car.objects.filter(owner=request.user)</span><br><span class="line">        <span class="keyword">return</span> super(MyModelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)</span><br></pre></td></tr></table></figure>
+<h3 id="外键改为查询方式"><a href="#外键改为查询方式" class="headerlink" title="外键改为查询方式"></a>外键改为查询方式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EntryAdmin</span><span class="params">(admin.ModelAdmin)</span>:</span></span><br><span class="line">    raw_id_fields = (<span class="string">'blog'</span>,)</span><br></pre></td></tr></table></figure>
+<h3 id="启用在列表页编辑功能"><a href="#启用在列表页编辑功能" class="headerlink" title="启用在列表页编辑功能"></a>启用在列表页编辑功能</h3><p><code>list_editable = (&#39;is_active&#39;,)</code></p>
+<h3 id="自定义编辑页面展示"><a href="#自定义编辑页面展示" class="headerlink" title="自定义编辑页面展示"></a>自定义编辑页面展示</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fieldsets=(</span><br><span class="line">    (<span class="string">'user'</span>, &#123;<span class="string">'fields'</span>:(<span class="string">'username'</span>, <span class="string">'slug'</span>, <span class="string">'email'</span>, <span class="string">'password'</span>)&#125;),</span><br><span class="line">    (<span class="string">'Personal info'</span>, &#123;<span class="string">'fields'</span>:(<span class="string">'name'</span>, <span class="string">'mobile'</span>)&#125;),</span><br><span class="line">    (<span class="string">'Permissions'</span>, &#123;<span class="string">'fields'</span>:(<span class="string">'is_active'</span>, <span class="string">'is_staff'</span>, <span class="string">'is_superuser'</span>, <span class="string">'groups'</span>, <span class="string">'user_permissions'</span>)&#125;),</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a href="http://www.cnblogs.com/linxiyue/p/4075048.html" target="_blank" rel="external">http://www.cnblogs.com/linxiyue/p/4075048.html</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2015-12-17-Salt-install.html" rel="next" title="SaltStack学习笔记1-salt安装配置">
+                <i class="fa fa-chevron-left"></i> SaltStack学习笔记1-salt安装配置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016-01-18-Virtualenv-user.html" rel="prev" title="使用virtualenv 部署django应用问题记录">
+                使用virtualenv 部署django应用问题记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2016-01-05-Django-admin.html"
+           data-title="转载 - Django admin 定制案例" data-url="http://pylixm.cc/posts/2016-01-05-Django-admin.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#类级别权限"><span class="nav-number">1.</span> <span class="nav-text">类级别权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字段级别的权限"><span class="nav-number">2.</span> <span class="nav-text">字段级别的权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重写Model的save行为"><span class="nav-number">3.</span> <span class="nav-text">重写Model的save行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同的用户显示不同的数据行，重写列表页面返回的查询集"><span class="nav-number">4.</span> <span class="nav-text">不同的用户显示不同的数据行，重写列表页面返回的查询集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定制过滤器list-filter"><span class="nav-number">5.</span> <span class="nav-text">定制过滤器list_filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定制搜索功能"><span class="nav-number">6.</span> <span class="nav-text">定制搜索功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外键字段过滤"><span class="nav-number">7.</span> <span class="nav-text">外键字段过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外键改为查询方式"><span class="nav-number">8.</span> <span class="nav-text">外键改为查询方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启用在列表页编辑功能"><span class="nav-number">9.</span> <span class="nav-text">启用在列表页编辑功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义编辑页面展示"><span class="nav-number">10.</span> <span class="nav-text">自定义编辑页面展示</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">10.1.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

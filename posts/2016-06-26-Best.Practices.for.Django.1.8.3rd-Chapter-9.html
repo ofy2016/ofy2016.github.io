@@ -1,0 +1,824 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="django," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="其他章节索引页
+第十一章 Form所有录入的数据使用form 来进行校验面对复杂多变的需求，我们自行校验是比较困难的。将校验集中在form层，利用这久经考验的校验机制。
+在 html 的form 中使用 post方法，除了查询。在使用http的form形式来修改数据时，记得使用 csrf来保护数据。除了 http 的形式外，ajax 提交的也要使用csrf 来保护数据。
+理解怎么给 form 实例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 最佳实践-读书笔记 - 第十一章、第十二章 Form">
+<meta property="og:url" content="http://pylixm.cc/posts/2016-06-26-Best.Practices.for.Django.1.8.3rd-Chapter-9.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="其他章节索引页
+第十一章 Form所有录入的数据使用form 来进行校验面对复杂多变的需求，我们自行校验是比较困难的。将校验集中在form层，利用这久经考验的校验机制。
+在 html 的form 中使用 post方法，除了查询。在使用http的form形式来修改数据时，记得使用 csrf来保护数据。除了 http 的形式外，ajax 提交的也要使用csrf 来保护数据。
+理解怎么给 form 实例">
+<meta property="og:updated_time" content="2016-06-26T13:46:01.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 最佳实践-读书笔记 - 第十一章、第十二章 Form">
+<meta name="twitter:description" content="其他章节索引页
+第十一章 Form所有录入的数据使用form 来进行校验面对复杂多变的需求，我们自行校验是比较困难的。将校验集中在form层，利用这久经考验的校验机制。
+在 html 的form 中使用 post方法，除了查询。在使用http的form形式来修改数据时，记得使用 csrf来保护数据。除了 http 的形式外，ajax 提交的也要使用csrf 来保护数据。
+理解怎么给 form 实例">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Django 最佳实践-读书笔记 - 第十一章、第十二章 Form | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Django 最佳实践-读书笔记 - 第十一章、第十二章 Form
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-26T20:16:00+08:00" content="2016-06-26">
+              2016-06-26
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2016-06-26-Best.Practices.for.Django.1.8.3rd-Chapter-9.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2016-06-26-Best.Practices.for.Django.1.8.3rd-Chapter-9.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2016-06-26-Best.Practices.for.Django.1.8.3rd-Chapter-9.html" class="leancloud_visitors" data-flag-title="Django 最佳实践-读书笔记 - 第十一章、第十二章 Form">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="2016-05-22-Best.Practices.for.Django.1.8.3rd-Index.html">其他章节索引页</a></p>
+<h1 id="第十一章-Form"><a href="#第十一章-Form" class="headerlink" title="第十一章 Form"></a>第十一章 Form</h1><h2 id="所有录入的数据使用form-来进行校验"><a href="#所有录入的数据使用form-来进行校验" class="headerlink" title="所有录入的数据使用form 来进行校验"></a>所有录入的数据使用form 来进行校验</h2><p>面对复杂多变的需求，我们自行校验是比较困难的。将校验集中在form层，利用这久经考验的校验机制。</p>
+<h2 id="在-html-的form-中使用-post方法，除了查询。"><a href="#在-html-的form-中使用-post方法，除了查询。" class="headerlink" title="在 html 的form 中使用 post方法，除了查询。"></a>在 html 的form 中使用 post方法，除了查询。</h2><h2 id="在使用http的form形式来修改数据时，记得使用-csrf来保护数据。"><a href="#在使用http的form形式来修改数据时，记得使用-csrf来保护数据。" class="headerlink" title="在使用http的form形式来修改数据时，记得使用 csrf来保护数据。"></a>在使用http的form形式来修改数据时，记得使用 csrf来保护数据。</h2><p>除了 http 的形式外，ajax 提交的也要使用csrf 来保护数据。</p>
+<h2 id="理解怎么给-form-实例添加属性"><a href="#理解怎么给-form-实例添加属性" class="headerlink" title="理解怎么给 form 实例添加属性"></a>理解怎么给 form 实例添加属性</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># forms</span></span><br><span class="line"><span class="keyword">from</span> django <span class="keyword">import</span> forms</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Taster</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TasterForm</span><span class="params">(forms.ModelForm)</span>:</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = Taster</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="comment"># set the user as an attribute of the form</span></span><br><span class="line">        self.user = kwargs.pop(<span class="string">'user'</span>)</span><br><span class="line">        super(TasterForm, self).__init__(*args, **kwargs)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># views</span></span><br><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span> UpdateView</span><br><span class="line"><span class="keyword">from</span> braces.views <span class="keyword">import</span> LoginRequiredMixin</span><br><span class="line"><span class="keyword">from</span> .forms <span class="keyword">import</span> TasterForm</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Taster</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TasterUpdateView</span><span class="params">(LoginRequiredMixin, UpdateView)</span>:</span></span><br><span class="line">    model = Taster</span><br><span class="line">    form_class = TasterForm</span><br><span class="line">    success_url = <span class="string">"/someplace/"</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_form_kwargs</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""This method is what injects forms with their keyword arguments."""</span></span><br><span class="line">        <span class="comment"># grab the current set of form #kwargs</span></span><br><span class="line">        kwargs = super(TasterUpdateView, self).get_form_kwargs()</span><br><span class="line">        <span class="comment"># Update the kwargs with the user_id</span></span><br><span class="line">        kwargs[<span class="string">'user'</span>] = self.request.user</span><br><span class="line">        <span class="keyword">return</span> kwargs</span><br><span class="line">.</span><br></pre></td></tr></table></figure>
+<h2 id="知道-form-校验是怎么工作的"><a href="#知道-form-校验是怎么工作的" class="headerlink" title="知道 form 校验是怎么工作的"></a>知道 form 校验是怎么工作的</h2><p>当你调用 <code>form.is valid()</code>时，很多事情发生：</p>
+<ul>
+<li>如果这个form已经绑定了数据，<code>`form.is_valid()</code>会调用 <code>form.full_clean()</code> 方法。</li>
+<li><code>form.full_clean()</code> 方法会遍历form 的字段，挨个字段的校验他们。<ul>
+<li>进入字段的数据会通过 <code>to_python()</code>方法被强制转为python格式，否则会抛出<code>ValidationError</code>异常。</li>
+<li>数据针对每个字段特有的规则或自定义的规则，进行校验。失败后，抛出<code>ValidationError</code>异常。</li>
+<li>如果有自定的<code>clean &lt;field&gt;()</code>方法，此时会调用他们</li>
+</ul>
+</li>
+<li><code>form.full_clean()</code> 会执行 <code>form.clean()</code>方法。</li>
+<li>如果是一个<code>ModelForm</code>实例,<code>form.post_clean()</code>会如下处理：<ul>
+<li>将 <code>ModelForm</code> 数据转成 <code>Model</code> 实例，而不管 <code>form.is_valid()</code> 是否严重通过。</li>
+<li>Calls the model’s clean() method. For reference, saving a model instance through the<br>ORM does not call the model’s clean() method.</li>
+</ul>
+</li>
+</ul>
+<h2 id="一些有用的-form-方法"><a href="#一些有用的-form-方法" class="headerlink" title="一些有用的 form 方法"></a>一些有用的 form 方法</h2><ul>
+<li>Add Errors to Forms with Form.add error()</li>
+<li><a href="http://www.2scoops.co/1.8-form.errors.as_data/" target="_blank" rel="external">http://www.2scoops.co/1.8-form.errors.as_data/</a></li>
+<li><a href="http://www.2scoops.co/1.8-form.errors.as_json/" target="_blank" rel="external">http://www.2scoops.co/1.8-form.errors.as_json/</a></li>
+<li><a href="http://www.2scoops.co/1.8-form.has_error/" target="_blank" rel="external">http://www.2scoops.co/1.8-form.has_error/</a></li>
+<li><a href="http://www.2scoops.co/1.8-form.non_field_errors/" target="_blank" rel="external">http://www.2scoops.co/1.8-form.non_field_errors/</a></li>
+</ul>
+<h1 id="第-十二-章-Form-通用的技巧"><a href="#第-十二-章-Form-通用的技巧" class="headerlink" title="第 十二 章 Form 通用的技巧"></a>第 十二 章 Form 通用的技巧</h1><h2 id="简单的-ModelForm-使用默认的校验即可。"><a href="#简单的-ModelForm-使用默认的校验即可。" class="headerlink" title="简单的 ModelForm 使用默认的校验即可。"></a>简单的 <code>ModelForm</code> 使用默认的校验即可。</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># flavors/views.py</span></span><br><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span> CreateView, UpdateView</span><br><span class="line"><span class="keyword">from</span> braces.views <span class="keyword">import</span> LoginRequiredMixin</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Flavor</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FlavorCreateView</span><span class="params">(LoginRequiredMixin, CreateView)</span>:</span></span><br><span class="line">    model = Flavor</span><br><span class="line">    fields = (<span class="string">'title'</span>, <span class="string">'slug'</span>, <span class="string">'scoops_remaining'</span>)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FlavorUpdateView</span><span class="params">(LoginRequiredMixin, UpdateView)</span>:</span></span><br><span class="line">    model = Flavor</span><br><span class="line">    fields = (<span class="string">'title'</span>, <span class="string">'slug'</span>, <span class="string">'scoops_remaining'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="自定义字段验证-进行特定的校验"><a href="#自定义字段验证-进行特定的校验" class="headerlink" title="自定义字段验证,进行特定的校验"></a>自定义字段验证,进行特定的校验</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># core/validators.py</span></span><br><span class="line"><span class="keyword">from</span> django.core.exceptions <span class="keyword">import</span> ValidationError</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validate_tasty</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="string">"""Raise a ValidationError if the value doesn't start with the</span><br><span class="line">    word 'Tasty'.</span><br><span class="line">    """</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> value.startswith(<span class="string">u"Tasty"</span>):</span><br><span class="line">        msg = <span class="string">u"Must start with Tasty"</span></span><br><span class="line">        <span class="keyword">raise</span> ValidationError(msg)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 直接将校验添加到 model中</span></span><br><span class="line"><span class="comment"># core/models.py</span></span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="keyword">from</span> .validators <span class="keyword">import</span> validate_tasty</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TastyTitleAbstractModel</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    title = models.CharField(max_length=<span class="number">255</span>, validators=[validate_tasty])</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        abstract = <span class="keyword">True</span></span><br><span class="line">        </span><br><span class="line"><span class="comment"># flavors/models.py</span></span><br><span class="line"><span class="keyword">from</span> django.core.urlresolvers <span class="keyword">import</span> reverse</span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="keyword">from</span> core.models <span class="keyword">import</span> TastyTitleAbstractModel</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flavor</span><span class="params">(TastyTitleAbstractModel)</span>:</span></span><br><span class="line">    slug = models.SlugField()</span><br><span class="line">    scoops_remaining = models.IntegerField(default=<span class="number">0</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_absolute_url</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> reverse(<span class="string">"flavors:detail"</span>, kwargs=&#123;<span class="string">"slug"</span>: self.slug&#125;)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 仅将校验添加到form 中    </span></span><br><span class="line"><span class="comment"># flavors/forms.py</span></span><br><span class="line"><span class="keyword">from</span> django <span class="keyword">import</span> forms</span><br><span class="line"><span class="keyword">from</span> core.validators <span class="keyword">import</span> validate_tasty</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Flavor</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FlavorForm</span><span class="params">(forms.ModelForm)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">    super(FlavorForm, self).__init__(*args, **kwargs)</span><br><span class="line">    self.fields[<span class="string">"title"</span>].validators.append(validate_tasty)</span><br><span class="line">    self.fields[<span class="string">"slug"</span>].validators.append(validate_tasty)</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = Flavor</span><br></pre></td></tr></table></figure>
+<h2 id="Overriding-the-Clean-Stage-of-Validation"><a href="#Overriding-the-Clean-Stage-of-Validation" class="headerlink" title="Overriding the Clean Stage of Validation"></a>Overriding the Clean Stage of Validation</h2><p>原因：</p>
+<ul>
+<li>对多<code>Multi-field</code> 的校验</li>
+<li>避免重复验证（Validation involving existing data from the database that has already been validated）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># flavors/forms.py</span></span><br><span class="line"><span class="keyword">from</span> django <span class="keyword">import</span> forms</span><br><span class="line"><span class="keyword">from</span> flavors.models <span class="keyword">import</span> Flavor</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamOrderForm</span><span class="params">(forms.Form)</span>:</span></span><br><span class="line">    <span class="string">"""Normally done with forms.ModelForm. But we use forms.Form here</span><br><span class="line">    to demonstrate that these sorts of techniques work on every</span><br><span class="line">    type of form.</span><br><span class="line">    """</span></span><br><span class="line">    slug = forms.ChoiceField(<span class="string">"Flavor"</span>)</span><br><span class="line">    toppings = forms.CharField()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        super(IceCreamOrderForm, self).__init__(*args,</span><br><span class="line">        **kwargs)</span><br><span class="line">        <span class="comment"># We dynamically set the choices here rather than</span></span><br><span class="line">        <span class="comment"># in the flavor field definition. Setting them in</span></span><br><span class="line">        <span class="comment"># the field definition means status updates won't</span></span><br><span class="line">        <span class="comment"># be reflected in the form without server restarts.</span></span><br><span class="line">        self.fields[<span class="string">"slug"</span>].choices = [</span><br><span class="line">        (x.slug, x.title) <span class="keyword">for</span> x <span class="keyword">in</span> Flavor.objects.all()</span><br><span class="line">        ]</span><br><span class="line">        <span class="comment"># <span class="doctag">NOTE:</span> We could filter by whether or not a flavor</span></span><br><span class="line">        <span class="comment"># has any scoops, but this is an example of</span></span><br><span class="line">        <span class="comment"># how to use clean_slug, not filter().</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">clean_slug</span><span class="params">(self)</span>:</span></span><br><span class="line">        slug = self.cleaned_data[<span class="string">"slug"</span>]</span><br><span class="line">        <span class="keyword">if</span> Flavor.objects.get(slug=slug).scoops_remaining &lt;= <span class="number">0</span>:</span><br><span class="line">            msg = <span class="string">u"Sorry, we are out of that flavor."</span></span><br><span class="line">            <span class="keyword">raise</span> forms.ValidationError(msg)</span><br><span class="line">        <span class="keyword">return</span> slug</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">clean</span><span class="params">(self)</span>:</span></span><br><span class="line">        cleaned_data = super(IceCreamOrderForm, self).clean()</span><br><span class="line">        slug = cleaned_data.get(<span class="string">"slug"</span>, <span class="string">""</span>)</span><br><span class="line">        toppings = cleaned_data.get(<span class="string">"toppings"</span>, <span class="string">""</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Silly "too much chocolate" validation example</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">u"chocolate"</span> <span class="keyword">in</span> slug.lower() <span class="keyword">and</span> \</span><br><span class="line">            <span class="string">u"chocolate"</span> <span class="keyword">in</span> toppings.lower():</span><br><span class="line">            msg = <span class="string">u"Your order has too much chocolate."</span></span><br><span class="line">            <span class="keyword">raise</span> forms.ValidationError(msg)</span><br><span class="line">        <span class="keyword">return</span> cleaned_data</span><br></pre></td></tr></table></figure>
+<h2 id="扩展-Django-Form-Field-2-CBVs-2-Forms-1-Model"><a href="#扩展-Django-Form-Field-2-CBVs-2-Forms-1-Model" class="headerlink" title="扩展 Django Form Field (2 CBVs, 2 Forms, 1 Model)"></a>扩展 <code>Django Form Field</code> (2 CBVs, 2 Forms, 1 Model)</h2><p>2个 view，2个form 对应一个model</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># stores/models.py</span></span><br><span class="line"><span class="keyword">from</span> django.core.urlresolvers <span class="keyword">import</span> reverse</span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamStore</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    title = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line">    block_address = models.TextField()</span><br><span class="line">    phone = models.CharField(max_length=<span class="number">20</span>, blank=<span class="keyword">True</span>)</span><br><span class="line">    description = models.TextField(blank=<span class="keyword">True</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_absolute_url</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> reverse(<span class="string">"store_detail"</span>, kwargs=&#123;<span class="string">"pk"</span>: self.pk&#125;)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># stores/forms.py</span></span><br><span class="line"><span class="comment"># Call phone and description from the self.fields dict-like object</span></span><br><span class="line"><span class="keyword">from</span> django <span class="keyword">import</span> forms</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> IceCreamStore</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamStoreUpdateForm</span><span class="params">(forms.ModelForm)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = IceCreamStore</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="comment"># Call the original __init__ method before assigning</span></span><br><span class="line">        <span class="comment"># field overloads</span></span><br><span class="line">        super(IceCreamStoreUpdateForm, self).__init__(*args,</span><br><span class="line">        **kwargs)</span><br><span class="line">        self.fields[<span class="string">"phone"</span>].required = <span class="keyword">True</span></span><br><span class="line">        self.fields[<span class="string">"description"</span>].required = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># stores/forms.py</span></span><br><span class="line"><span class="keyword">from</span> django <span class="keyword">import</span> forms</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> IceCreamStore</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamStoreCreateForm</span><span class="params">(forms.ModelForm)</span>:</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        model = IceCreamStore</span><br><span class="line">        fields = (<span class="string">"title"</span>, <span class="string">"block_address"</span>, )</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamStoreUpdateForm</span><span class="params">(IceCreamStoreCreateForm)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        super(IceCreamStoreUpdateForm,</span><br><span class="line">        self).__init__(*args, **kwargs)</span><br><span class="line">        self.fields[<span class="string">"phone"</span>].required = <span class="keyword">True</span></span><br><span class="line">        self.fields[<span class="string">"description"</span>].required = <span class="keyword">True</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span><span class="params">(IceCreamStoreCreateForm.Meta)</span>:</span></span><br><span class="line">        <span class="comment"># show all the fields!</span></span><br><span class="line">        fields = (<span class="string">"title"</span>, <span class="string">"block_address"</span>, <span class="string">"phone"</span>,</span><br><span class="line">        <span class="string">"description"</span>, )</span><br><span class="line">        </span><br><span class="line"><span class="comment"># stores/views</span></span><br><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span> CreateView, UpdateView</span><br><span class="line"><span class="keyword">from</span> .forms <span class="keyword">import</span> IceCreamStoreCreateForm</span><br><span class="line"><span class="keyword">from</span> .forms <span class="keyword">import</span> IceCreamStoreUpdateForm</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> IceCreamStore</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamCreateView</span><span class="params">(CreateView)</span>:</span></span><br><span class="line">    model = IceCreamStore</span><br><span class="line">    form_class = IceCreamStoreCreateForm</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamUpdateView</span><span class="params">(UpdateView)</span>:</span></span><br><span class="line">    model = IceCreamStore</span><br><span class="line">    form_class = IceCreamStoreUpdateForm</span><br></pre></td></tr></table></figure>
+<h2 id="在views中，重复使用搜索-mixin"><a href="#在views中，重复使用搜索-mixin" class="headerlink" title="在views中，重复使用搜索 mixin"></a>在views中，重复使用搜索 mixin</h2><p>一个搜索 from 在2个view 中使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># core/views.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TitleSearchMixin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_queryset</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># Fetch the queryset from the parent's get_queryset</span></span><br><span class="line">        queryset = super(TitleSearchMixin, self).get_queryset()</span><br><span class="line">        <span class="comment"># Get the q GET parameter</span></span><br><span class="line">        q = self.request.GET.get(<span class="string">"q"</span>)</span><br><span class="line">        <span class="keyword">if</span> q:</span><br><span class="line">            <span class="comment"># return a filtered queryset</span></span><br><span class="line">            <span class="keyword">return</span> queryset.filter(title__icontains=q)</span><br><span class="line">        <span class="comment"># No q is specified so we return queryset</span></span><br><span class="line">        <span class="keyword">return</span> queryset</span><br><span class="line">        </span><br><span class="line"><span class="comment"># add to flavors/views.py</span></span><br><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span> ListView</span><br><span class="line"><span class="keyword">from</span> core.views <span class="keyword">import</span> TitleSearchMixin</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Flavor</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FlavorListView</span><span class="params">(TitleSearchMixin, ListView)</span>:</span></span><br><span class="line">    model = Flavor</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># add to stores/views.py</span></span><br><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span> ListView</span><br><span class="line"><span class="keyword">from</span> core.views <span class="keyword">import</span> TitleSearchMixin</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Store</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceCreamStoreListView</span><span class="params">(TitleSearchMixin, ListView)</span>:</span></span><br><span class="line">    model = Store</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;# form to go into stores/store_list.html template #&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">""</span> <span class="attr">method</span>=<span class="string">"GET"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"q"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>search<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line">&#123;# form to go into flavors/flavor_list.html template #&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">""</span> <span class="attr">method</span>=<span class="string">"GET"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"q"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>search<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="form-相关3方包推荐："><a href="#form-相关3方包推荐：" class="headerlink" title="form 相关3方包推荐："></a>form 相关3方包推荐：</h1><p>PACKAGE TIP: Useful Form-Related Packages</p>
+<ul>
+<li><code>django-floppyforms</code> for rendering Django inputs in HTML5.</li>
+<li><code>django-crispy-forms</code> for advanced form layout controls. By default, forms are rendered<br>with Twitter Bootstrap form elements and styles. This package plays well with django-<br>floppyforms, so they are often used together.</li>
+<li><code>django-forms-bootstrap</code> is a simple tool for rendering Django forms using Twitter<br>Bootstrap styles. This package plays well with django-floppyforms but con..icts with<br>django-crispy-forms.</li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2016-06-19-Best.Practices.for.Django.1.8.3rd-Chapter-8.html" rel="next" title="Django 最佳实践-读书笔记 - 第八、九、十章 FBVS & CBVS">
+                <i class="fa fa-chevron-left"></i> Django 最佳实践-读书笔记 - 第八、九、十章 FBVS & CBVS
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016-07-02-Best.Practices.for.Django.1.8.3rd-Chapter-10.html" rel="prev" title="Django 最佳实践-读书笔记 - 第十三章 模板最佳实践">
+                Django 最佳实践-读书笔记 - 第十三章 模板最佳实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2016-06-26-Best.Practices.for.Django.1.8.3rd-Chapter-9.html"
+           data-title="Django 最佳实践-读书笔记 - 第十一章、第十二章 Form" data-url="http://pylixm.cc/posts/2016-06-26-Best.Practices.for.Django.1.8.3rd-Chapter-9.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第十一章-Form"><span class="nav-number">1.</span> <span class="nav-text">第十一章 Form</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#所有录入的数据使用form-来进行校验"><span class="nav-number">1.1.</span> <span class="nav-text">所有录入的数据使用form 来进行校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-html-的form-中使用-post方法，除了查询。"><span class="nav-number">1.2.</span> <span class="nav-text">在 html 的form 中使用 post方法，除了查询。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在使用http的form形式来修改数据时，记得使用-csrf来保护数据。"><span class="nav-number">1.3.</span> <span class="nav-text">在使用http的form形式来修改数据时，记得使用 csrf来保护数据。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解怎么给-form-实例添加属性"><span class="nav-number">1.4.</span> <span class="nav-text">理解怎么给 form 实例添加属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知道-form-校验是怎么工作的"><span class="nav-number">1.5.</span> <span class="nav-text">知道 form 校验是怎么工作的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些有用的-form-方法"><span class="nav-number">1.6.</span> <span class="nav-text">一些有用的 form 方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第-十二-章-Form-通用的技巧"><span class="nav-number">2.</span> <span class="nav-text">第 十二 章 Form 通用的技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的-ModelForm-使用默认的校验即可。"><span class="nav-number">2.1.</span> <span class="nav-text">简单的 ModelForm 使用默认的校验即可。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义字段验证-进行特定的校验"><span class="nav-number">2.2.</span> <span class="nav-text">自定义字段验证,进行特定的校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overriding-the-Clean-Stage-of-Validation"><span class="nav-number">2.3.</span> <span class="nav-text">Overriding the Clean Stage of Validation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展-Django-Form-Field-2-CBVs-2-Forms-1-Model"><span class="nav-number">2.4.</span> <span class="nav-text">扩展 Django Form Field (2 CBVs, 2 Forms, 1 Model)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在views中，重复使用搜索-mixin"><span class="nav-number">2.5.</span> <span class="nav-text">在views中，重复使用搜索 mixin</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#form-相关3方包推荐："><span class="nav-number">3.</span> <span class="nav-text">form 相关3方包推荐：</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>

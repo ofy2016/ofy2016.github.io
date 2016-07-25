@@ -1,0 +1,837 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="rabbitmq," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="最近做系统迁移，搭建环境时遇到了rabbitmq的搭建。在此记录，备查。
+环境：
+
+centos 6.5 
+
+官方centos安装文档：http://www.rabbitmq.com/install-rpm.html
+其他系统安装文档：http://www.rabbitmq.com/download.html
+0x00 安装Erlang因为rabbitmq依赖Erlang，安装前需要先安装Erla">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rabbitmq 安装配置记录">
+<meta property="og:url" content="http://pylixm.cc/posts/2016-01-19-Rabbitmq-install.html">
+<meta property="og:site_name" content="PyLixm'Wiki">
+<meta property="og:description" content="最近做系统迁移，搭建环境时遇到了rabbitmq的搭建。在此记录，备查。
+环境：
+
+centos 6.5 
+
+官方centos安装文档：http://www.rabbitmq.com/install-rpm.html
+其他系统安装文档：http://www.rabbitmq.com/download.html
+0x00 安装Erlang因为rabbitmq依赖Erlang，安装前需要先安装Erla">
+<meta property="og:updated_time" content="2016-02-21T08:48:14.949Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rabbitmq 安装配置记录">
+<meta name="twitter:description" content="最近做系统迁移，搭建环境时遇到了rabbitmq的搭建。在此记录，备查。
+环境：
+
+centos 6.5 
+
+官方centos安装文档：http://www.rabbitmq.com/install-rpm.html
+其他系统安装文档：http://www.rabbitmq.com/download.html
+0x00 安装Erlang因为rabbitmq依赖Erlang，安装前需要先安装Erla">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6216560945443898000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> rabbitmq 安装配置记录 | PyLixm'Wiki </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6ae30333ba35ec34bf3c7d6471d7ba27";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="http://s6.cnzz.com/stat.php?id=1259027433&web_id=1259027433" type="text/javascript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">PyLixm'Wiki</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                rabbitmq 安装配置记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-19T00:00:00+08:00" content="2016-01-19">
+              2016-01-19
+            </time>
+          </span>
+         
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/rabbitmq/" itemprop="url" rel="index">
+                    <span itemprop="name">rabbitmq</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+                   
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/posts/2016-01-19-Rabbitmq-install.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="posts/2016-01-19-Rabbitmq-install.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/posts/2016-01-19-Rabbitmq-install.html" class="leancloud_visitors" data-flag-title="rabbitmq 安装配置记录">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数  </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近做系统迁移，搭建环境时遇到了rabbitmq的搭建。在此记录，备查。</p>
+<p>环境：</p>
+<ul>
+<li>centos 6.5 </li>
+</ul>
+<p>官方centos安装文档：<a href="http://www.rabbitmq.com/install-rpm.html" target="_blank" rel="external">http://www.rabbitmq.com/install-rpm.html</a></p>
+<p>其他系统安装文档：<a href="http://www.rabbitmq.com/download.html" target="_blank" rel="external">http://www.rabbitmq.com/download.html</a></p>
+<h3 id="0x00-安装Erlang"><a href="#0x00-安装Erlang" class="headerlink" title="0x00 安装Erlang"></a>0x00 安装Erlang</h3><p>因为rabbitmq依赖Erlang，安装前需要先安装Erlang。</p>
+<pre><code>yum install erlang
+</code></pre><h3 id="0x01-安装rabbitmq"><a href="#0x01-安装rabbitmq" class="headerlink" title="0x01 安装rabbitmq"></a>0x01 安装rabbitmq</h3><pre><code>rpm --import https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+yum install rabbitmq-server-3.6.0-1.noarch.rpm
+
+注：使用yum 安装时，遇到问题没有安装包的错误。把版本号去掉，即可正常安装。
+</code></pre><h3 id="0x02-启动rabbitmq"><a href="#0x02-启动rabbitmq" class="headerlink" title="0x02 启动rabbitmq"></a>0x02 启动rabbitmq</h3><pre><code>service rabbitmq-server stop/start/restart
+/etc/init.d/rabbitmq-server stop/start/restart
+# 开机启动
+chkconfig rabbitmq-server on
+</code></pre><h3 id="0x03-链接端口"><a href="#0x03-链接端口" class="headerlink" title="0x03 链接端口"></a>0x03 链接端口</h3><pre><code>4369 (epmd), 25672 (Erlang distribution)
+5672, 5671 (AMQP 0-9-1 without and with TLS)
+15672 (if management plugin is enabled)
+61613, 61614 (if STOMP is enabled)
+1883, 8883 (if MQTT is enabled)
+</code></pre><h3 id="0x04-安装-RabbitMQ-Web管理插件"><a href="#0x04-安装-RabbitMQ-Web管理插件" class="headerlink" title="0x04 安装 RabbitMQ Web管理插件"></a>0x04 安装 RabbitMQ Web管理插件</h3><p>在终端执行如下命令即安装成功：</p>
+<pre><code>rabbitmq-plugins enable rabbitmq_management  
+service rabbitmq-server restart  
+</code></pre><p>打开浏览器登录：<a href="http://127.0.0.1:15672" target="_blank" rel="external">http://127.0.0.1:15672</a>  55672也可以，直接跳转到下列web管理<br>登录 账号密码默认都是 guest</p>
+<h3 id="0x05-rabbitmq-相关管理命令"><a href="#0x05-rabbitmq-相关管理命令" class="headerlink" title="0x05 rabbitmq 相关管理命令"></a>0x05 rabbitmq 相关管理命令</h3><p>1、virtual_host管理</p>
+<pre><code>新建virtual_host: rabbitmqctl add_vhost  xxx
+撤销virtual_host: rabbitmqctl delete_vhost xxx
+</code></pre><p>2、用户管理</p>
+<pre><code>新建用户：rabbitmqctl add_user xxxpwd
+删除用户: rabbitmqctl delete_user xxx
+改密码: rabbimqctl change_password {username} {newpassword}
+设置用户角色：rabbitmqctl set_user_tags {username} {tag ...}
+        Tag可以为 administrator, monitoring, management
+</code></pre><p>3、权限管理<br>      权限设置：rabbitmqctl set_permissions [-pvhostpath] {user} {conf} {write} {read}<br>               Vhostpath<br>               Vhost路径<br>               user<br>      用户名<br>              Conf<br>      一个正则表达式match哪些配置资源能够被该用户访问。<br>              Write<br>      一个正则表达式match哪些配置资源能够被该用户读。<br>               Read<br>      一个正则表达式match哪些配置资源能够被该用户访问。</p>
+<pre><code>赋予全部权限：
+
+rabbitmqctl set_permissions -p vir_host tonyg &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;
+</code></pre><p>更多管理命令见官网文档：<a href="http://www.rabbitmq.com/man/rabbitmqctl.1.man.html#Access%20control" target="_blank" rel="external">http://www.rabbitmq.com/man/rabbitmqctl.1.man.html#Access%20control</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a href="http://www.rabbitmq.com/install-rpm.html" target="_blank" rel="external">http://www.rabbitmq.com/install-rpm.html</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/mlks_2008/article/details/18988301" target="_blank" rel="external">http://blog.csdn.net/mlks_2008/article/details/18988301</a></p>
+</li>
+<li><p><a href="http://stackoverflow.com/questions/26624263/celery-didnt-operate-well-because-of-errno-104" target="_blank" rel="external">http://stackoverflow.com/questions/26624263/celery-didnt-operate-well-because-of-errno-104</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rabbitmq/" rel="tag">#rabbitmq</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2016-01-19-Django-supervisor-celery.html" rel="next" title="使用 supervisor 来监控 django celery">
+                <i class="fa fa-chevron-left"></i> 使用 supervisor 来监控 django celery
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016-01-29-Django-cmd.html" rel="prev" title="django 相关命令总结">
+                django 相关命令总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="posts/2016-01-19-Rabbitmq-install.html"
+           data-title="rabbitmq 安装配置记录" data-url="http://pylixm.cc/posts/2016-01-19-Rabbitmq-install.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="PyLixm" />
+          <p class="site-author-name" itemprop="name">PyLixm</p>
+          <p class="site-description motion-element" itemprop="description">python, 自动化运维开发, django</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/pylixm" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://iwebtools.cn" title="程序员集散地" target="_blank">程序员集散地</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-安装Erlang"><span class="nav-number">1.</span> <span class="nav-text">0x00 安装Erlang</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-安装rabbitmq"><span class="nav-number">2.</span> <span class="nav-text">0x01 安装rabbitmq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-启动rabbitmq"><span class="nav-number">3.</span> <span class="nav-text">0x02 启动rabbitmq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-链接端口"><span class="nav-number">4.</span> <span class="nav-text">0x03 链接端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-安装-RabbitMQ-Web管理插件"><span class="nav-number">5.</span> <span class="nav-text">0x04 安装 RabbitMQ Web管理插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-rabbitmq-相关管理命令"><span class="nav-number">6.</span> <span class="nav-text">0x05 rabbitmq 相关管理命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">PyLixm</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"pylixm"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("OBJcj4PU8JI0zDfu0HJSrG6W-gzGzoHsz", "tBtFzC72xIlgo2UFbA33nqmU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>
